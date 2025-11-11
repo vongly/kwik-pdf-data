@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 
 from _util.helpers import (
-    get_files_s3_folder,
     write_csv_s3,
     create_s3_folder,
     move_s3_file,
@@ -9,7 +8,6 @@ from _util.helpers import (
 
 from env import (
     S3_BUCKET,
-    PDF_TO_BE_PROCESSED_FOLDER_S3,
     PDF_PROCESSED_FOLDER_S3,
     CSV_BASE_FOLDER_S3,
 )
@@ -17,7 +15,7 @@ from env import (
 from config import PARSE_FUNCTIONS
 
 
-def process_pdf_s3(
+def parse_report(
         self,
         filepath,
         bucket_name=S3_BUCKET,
