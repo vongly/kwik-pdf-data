@@ -54,7 +54,7 @@ def get_all_pdf_files(pdf_to_be_process_folder=PDF_TO_BE_PROCESSED_FOLDER_S3):
 def parse_report(
         filepath,
         bucket_name=S3_BUCKET,
-        pdf_process_folder=PDF_PROCESSED_FOLDER_S3,
+        pdf_processed_folder=PDF_PROCESSED_FOLDER_S3,
         csv_base_folder=CSV_BASE_FOLDER_S3,
         jobs=PARSE_FUNCTIONS,
         test=False,
@@ -62,7 +62,7 @@ def parse_report(
 
         processed_timestamp = datetime.now(timezone.utc)
 
-        create_s3_folder(folder_path=pdf_process_folder)
+        create_s3_folder(folder_path=pdf_processed_folder)
         create_s3_folder(folder_path=csv_base_folder)
 
         print('PROCESSING PDF:', filepath.split('/')[-1], '\n')
@@ -115,14 +115,22 @@ def parse_report(
                 print(f'NO REPORT - CSV NOT WRITTIEN - {report_name}')
 
         source = filepath
-        destination = f'{pdf_process_folder}{report_id}-{processed_timestamp_string}.pdf'
+        destination = f'{pdf_processed_folder}{report_id}-{processed_timestamp_string}.pdf'
 
 
-        move_details = move_s3_file(
-            source=source,
-            destination=destination,
-            test=test,
-        )
+        if test is False:
+            move_details = move_s3_file(
+                source=source,
+                destination=destination,
+                test=test,
+            )
+        elif test is True:
+            move_details = move_s3_file(
+                source=source,
+                destination=pdf_processed_folder,
+                test=test,
+            )
+
 
         for r in results:
             r['move_details'] = move_details
