@@ -63,7 +63,9 @@ class ExtractReport:
         self.report_period_end = dateutil.parser.parse(report_period_end_string)
         self.report_date_end = self.report_period_end.date()
 
-        self.report_id = f'{self.store_id}-{self.report_date.strftime('%Y.%m.%d')}-{self.report_date_end.strftime('%Y.%m.%d')}'
+        report_start_string = self.report_date.strftime('%Y.%m.%d')
+        report_end_string = self.report_date_end.strftime('%Y.%m.%d')
+        self.report_id = f'{self.store_id}-{report_start_string}-{report_end_string}'
 
         self.data_initial = None
         self.status_inital = 'initiated' 

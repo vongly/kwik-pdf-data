@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from _util.helpers import (
+    get_files_s3_folder,
     write_csv_s3,
     create_s3_folder,
     move_s3_file,
@@ -8,15 +9,21 @@ from _util.helpers import (
 
 from env import (
     S3_BUCKET,
+    PDF_TO_BE_PROCESSED_FOLDER_S3,
     PDF_PROCESSED_FOLDER_S3,
     CSV_BASE_FOLDER_S3,
 )
 
 from config import PARSE_FUNCTIONS
 
+def get_all_pdf_files(pdf_to_be_process_folder=PDF_TO_BE_PROCESSED_FOLDER_S3):
+    pdf_filepaths = get_files_s3_folder(prefix=pdf_to_be_process_folder)
+
+    output = [ {'filepath': f} for f in pdf_filepaths ]
+
+    return output
 
 def parse_report(
-        self,
         filepath,
         bucket_name=S3_BUCKET,
         pdf_process_folder=PDF_PROCESSED_FOLDER_S3,
@@ -29,7 +36,7 @@ def parse_report(
         create_s3_folder(folder_path=pdf_process_folder)
         create_s3_folder(folder_path=csv_base_folder)
 
-        print(filepath, '\n')
+        print('PROCESSING PDF:', filepath.split('/')[-1], '\n')
 
         results = []
         result = {}
@@ -38,7 +45,7 @@ def parse_report(
             job_function = job['function']
             result = job_function(
                 filename=filepath,
-                filepath=S3_BUCKET,
+                filepath=bucket_name,
                 processed_utc=processed_timestamp,
             )
 
@@ -65,24 +72,34 @@ def parse_report(
                         filename=f'{report_id}-{report_name}-{processed_timestamp_string}.csv',
                         destination=report_folder_path,
                     )
+                    print(f'CSV WRITTEN - {report_name}')
                 except Exception as e:
                     # Error
+                    print(f'ERROR - CSV NOT WRITTIEN - {report_name}: {e}')
                     exit()
             else:
                 # No Report
-                print(f'{report_name} - not written: No report')
+                print(f'NO REPORT - CSV NOT WRITTIEN - {report_name}')
+
+        source = filepath
+        destination = f'{pdf_process_folder}{report_id}-{processed_timestamp_string}.pdf'
+
+
+        move_details = move_s3_file(
+            source=source,
+            destination=destination,
+        )
 
         for r in results:
-            destination = f'{pdf_process_folder}{report_id}-{processed_timestamp_string}.pdf'
-
-            move_details = move_s3_file(
-                source = filepath,
-                destination=destination,
-            )
-
             r['move_details'] = move_details
-        
+
+        print('\nPDF Completed\n')
+
         return results
 
 if __name__ == '__main__':
-    pass
+    print('\n')
+    files = get_all_pdf_files()
+
+    for file in files:
+        parse_report(filepath=file['filepath'])

@@ -344,8 +344,7 @@ def move_s3_file(source, destination, bucket_name=S3_BUCKET):
 
     copy_source = {'Bucket': bucket_name, 'Key': source}
     s3.copy_object(Bucket=bucket_name, CopySource=copy_source, Key=destination)
-
-    s3.delete_object(Bucket=bucket_name, Key=source)
+#    s3.delete_object(Bucket=bucket_name, Key=source)
 
     return {
         'source': source,
