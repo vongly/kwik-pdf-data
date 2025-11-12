@@ -4,18 +4,15 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
+from _utils import helpers
 
-table_name = 'fuel_sales_by_grade'
+table_name = 'daily_sales_summary'
 pdf_report_start_phrase = 'Store Sales Summary Report'
-pdf_report_end_phrase = 'Total Sales'
+pdf_report_end_phrase = 'Store Tender Reading'
 
 columns = [
-    {'name': 'grade_number', 'dtype': 'int', 'index': 0},
-    {'name': 'grade_name', 'dtype': 'string', 'index': 1},
-    {'name': 'volume', 'dtype': 'float', 'index': 2},
-    {'name': 'sales_amount', 'dtype': 'float', 'index': 3},
-    {'name': 'percent_of_total', 'dtype': 'float', 'index': 4},
+    {'name': 'summary_description', 'dtype': 'string', 'index': 0},
+    {'name': 'amount', 'dtype': 'float', 'index': 1},
 ]
 
 def parse_pdf(filename, filepath, processed_utc):
@@ -40,25 +37,34 @@ def parse_pdf(filename, filepath, processed_utc):
 
     # Pulls Report Text
     parse_object.get_report_text(
-        skip_lead_rows=4,
-        skip_trailing_rows=6,
+        skip_lead_rows=8,
+        skip_trailing_rows=2,
     )
-
-    # Logic to identify columns in parsed words
-    # --> identifies phrases that belong to 1 column
-    # --> every report is different
-    parsed_text = parse_object.cleaned_text
-    parsed_words = parsed_text.split(' ')
 
     '''
         CUSTOM LOGIC
 
-        - fuels_sales_by_grade requires to remove 'Grade' from grade_number
+        - Total Fuel Sales has a Volume amount that needs to be removed
+            -> the value is identified as a float w/o a '$' symbol
     '''
-    parsed_words = [ word for word in parsed_words if word != 'Grade' ]
+    parsed_text = parse_object.cleaned_text
+    parsed_words = parsed_text.split(' ')
+    
+    for word in parsed_words:
+        try:
+            float(word.replace(',',''))
+            parsed_words.remove(word)
+        except:
+            pass
 
-    # Rebuilds parsed_text variable without 'Grade'
+    # Rebuilds parsed_text variable without Total Fuel Sales Volume
     parsed_text = ' '.join(parsed_words)
+
+    # Logic to identify columns in parsed words
+    # --> identifies phrases that belong to 1 column
+    # --> every report is different
+    parsed_text = parsed_text
+    parsed_words = parsed_text.split(' ')
 
     column_phrases = helpers.combine_column_phrases(parsed_words)
 

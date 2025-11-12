@@ -1,14 +1,11 @@
 import sys
 from pathlib import Path
-from datetime import datetime
 import dateutil
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
-
-from _util_report_specific import safe_drops
+from _utils import helpers, safe_drops
 
 table_name = 'safe_drops'
 pdf_report_start_phrase = 'Safe Drop Report\nRegister'

@@ -7,6 +7,20 @@ from _util.helpers import (
     move_s3_file,
 )
 
+from _report_parsing_scripts import (
+    card_transaction_counts,
+    daily_cashier_stats,
+    daily_reports,
+    daily_sales_summary,
+    department_sales,
+    fuel_dispensers_sales,
+    fuel_sales_by_grade,
+    paid_in_out,
+    safe_drops,
+    tax_summary,
+    tender_summary,
+)
+
 from env import (
     S3_BUCKET,
     PDF_TO_BE_PROCESSED_FOLDER_S3,
@@ -14,7 +28,21 @@ from env import (
     CSV_BASE_FOLDER_S3,
 )
 
-from config import PARSE_FUNCTIONS
+parse_functions = [
+    card_transaction_counts,
+    daily_cashier_stats,
+    daily_reports,
+    daily_sales_summary,
+    department_sales,
+    fuel_dispensers_sales,
+    fuel_sales_by_grade,
+    paid_in_out,
+    safe_drops,
+    tax_summary,
+    tender_summary,
+]
+
+PARSE_FUNCTIONS = [{'name': pf.__name__.split('.')[-1], 'function': pf.parse_pdf} for pf in parse_functions]
 
 def get_all_pdf_files(pdf_to_be_process_folder=PDF_TO_BE_PROCESSED_FOLDER_S3):
     pdf_filepaths = get_files_s3_folder(prefix=pdf_to_be_process_folder)
@@ -29,6 +57,7 @@ def parse_report(
         pdf_process_folder=PDF_PROCESSED_FOLDER_S3,
         csv_base_folder=CSV_BASE_FOLDER_S3,
         jobs=PARSE_FUNCTIONS,
+        test=False,
     ):
 
         processed_timestamp = datetime.now(timezone.utc)
@@ -67,12 +96,16 @@ def parse_report(
                     report_folder_path = f'{csv_base_folder}{report_name}/'
                     create_s3_folder(folder_path=report_folder_path)
 
-                    write_csv_s3(
-                        dictionary=r['data'],
-                        filename=f'{report_id}-{report_name}-{processed_timestamp_string}.csv',
-                        destination=report_folder_path,
-                    )
-                    print(f'CSV WRITTEN - {report_name}')
+                    if test is False:
+                        write_csv_s3(
+                            dictionary=r['data'],
+                            filename=f'{report_id}-{report_name}-{processed_timestamp_string}.csv',
+                            destination=report_folder_path,
+                        )
+                        print(f'CSV WRITTEN - {report_name}')
+                    elif test is True:
+                        print(f'REPORT FOUND - {report_name}')
+
                 except Exception as e:
                     # Error
                     print(f'ERROR - CSV NOT WRITTIEN - {report_name}: {e}')
@@ -88,6 +121,7 @@ def parse_report(
         move_details = move_s3_file(
             source=source,
             destination=destination,
+            test=test,
         )
 
         for r in results:

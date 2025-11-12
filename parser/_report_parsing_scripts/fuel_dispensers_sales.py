@@ -5,7 +5,7 @@ import dateutil
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
+from _utils import helpers
 
 table_name = 'fuel_dispenser_sales'
 pdf_report_start_phrase = 'Fuel Sales/Pump Totals Reconciliation Report'

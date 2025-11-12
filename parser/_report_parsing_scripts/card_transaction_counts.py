@@ -4,15 +4,15 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
+from _utils import helpers
 
-table_name = 'daily_sales_summary'
-pdf_report_start_phrase = 'Store Sales Summary Report'
-pdf_report_end_phrase = 'Store Tender Reading'
+table_name = 'card_transaction_counts'
+pdf_report_start_phrase = 'Transaction Count by Card Type'
+pdf_report_end_phrase = 'METHOD OF PAYMENT TOTALS REPORT'
 
 columns = [
-    {'name': 'summary_description', 'dtype': 'string', 'index': 0},
-    {'name': 'amount', 'dtype': 'float', 'index': 1},
+    {'name': 'card_type', 'dtype': 'string', 'index': 0},
+    {'name': 'count', 'dtype': 'int', 'index': 1},
 ]
 
 def parse_pdf(filename, filepath, processed_utc):
@@ -36,34 +36,12 @@ def parse_pdf(filename, filepath, processed_utc):
         return output
 
     # Pulls Report Text
-    parse_object.get_report_text(
-        skip_lead_rows=8,
-        skip_trailing_rows=2,
-    )
-
-    '''
-        CUSTOM LOGIC
-
-        - Total Fuel Sales has a Volume amount that needs to be removed
-            -> the value is identified as a float w/o a '$' symbol
-    '''
-    parsed_text = parse_object.cleaned_text
-    parsed_words = parsed_text.split(' ')
-    
-    for word in parsed_words:
-        try:
-            float(word.replace(',',''))
-            parsed_words.remove(word)
-        except:
-            pass
-
-    # Rebuilds parsed_text variable without Total Fuel Sales Volume
-    parsed_text = ' '.join(parsed_words)
+    parse_object.get_report_text()
 
     # Logic to identify columns in parsed words
     # --> identifies phrases that belong to 1 column
     # --> every report is different
-    parsed_text = parsed_text
+    parsed_text = parse_object.cleaned_text
     parsed_words = parsed_text.split(' ')
 
     column_phrases = helpers.combine_column_phrases(parsed_words)

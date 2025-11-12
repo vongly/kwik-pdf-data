@@ -4,9 +4,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
-
-from _util_report_specific import tender_summary
+from _utils import helpers, tender_summary
 
 table_name = 'tender_summary'
 pdf_report_start_phrase = 'PLU Sales Report'

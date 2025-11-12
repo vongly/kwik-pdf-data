@@ -339,12 +339,16 @@ def create_s3_folder(folder_path, bucket_name=S3_BUCKET):
         'folder': folder_path
     }
 
-def move_s3_file(source, destination, bucket_name=S3_BUCKET):
+def move_s3_file(source, destination, bucket_name=S3_BUCKET, test=False):
     s3 = connect_s3()
 
-    copy_source = {'Bucket': bucket_name, 'Key': source}
-    s3.copy_object(Bucket=bucket_name, CopySource=copy_source, Key=destination)
-#    s3.delete_object(Bucket=bucket_name, Key=source)
+    if test is False:
+        copy_source = {'Bucket': bucket_name, 'Key': source}
+        s3.copy_object(Bucket=bucket_name, CopySource=copy_source, Key=destination)
+        s3.delete_object(Bucket=bucket_name, Key=source)
+    elif test is True:
+        s3.head_object(Bucket=bucket_name, Key=source)
+        s3.head_object(Bucket=bucket_name, Key=destination)
 
     return {
         'source': source,

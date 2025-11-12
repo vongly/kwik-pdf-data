@@ -4,15 +4,22 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
+from _utils import helpers
 
-table_name = 'card_transaction_counts'
-pdf_report_start_phrase = 'Transaction Count by Card Type'
-pdf_report_end_phrase = 'METHOD OF PAYMENT TOTALS REPORT'
+table_name = 'department_sales'
+pdf_report_start_phrase = 'Department Sales Report'
+pdf_report_end_phrase = '100%'
 
 columns = [
-    {'name': 'card_type', 'dtype': 'string', 'index': 0},
-    {'name': 'count', 'dtype': 'int', 'index': 1},
+    {'name': 'department_name', 'dtype': 'description', 'index': 0},
+    {'name': 'gross_sales', 'dtype': 'float', 'index': 1},
+    {'name': 'item_count', 'dtype': 'int', 'index': 2},
+    {'name': 'refund_count', 'dtype': 'int', 'index': 3},
+    {'name': 'net_count', 'dtype': 'int', 'index': 4},
+    {'name': 'refund_amount', 'dtype': 'float', 'index': 5},
+    {'name': 'discount_amount', 'dtype': 'float', 'index': 6},
+    {'name': 'net_sales', 'dtype': 'float', 'index': 7},
+    {'name': 'percent_sales', 'dtype': 'float', 'index': 8},
 ]
 
 def parse_pdf(filename, filepath, processed_utc):
@@ -36,7 +43,10 @@ def parse_pdf(filename, filepath, processed_utc):
         return output
 
     # Pulls Report Text
-    parse_object.get_report_text()
+    parse_object.get_report_text(
+        skip_lead_rows=4,
+        skip_trailing_rows=1,
+    )
 
     # Logic to identify columns in parsed words
     # --> identifies phrases that belong to 1 column

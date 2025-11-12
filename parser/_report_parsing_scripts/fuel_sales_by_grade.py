@@ -4,16 +4,18 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _core.pdf_parser import ExtractReport
-from _util import helpers
+from _utils import helpers
 
-table_name = 'daily_cashier_stats'
-pdf_report_start_phrase = 'Store Till Summary Cashier Statistics'
-pdf_report_end_phrase = 'Test Fuel'
+table_name = 'fuel_sales_by_grade'
+pdf_report_start_phrase = 'Store Sales Summary Report'
+pdf_report_end_phrase = 'Total Sales'
 
 columns = [
-    {'name': 'description', 'dtype' : 'string', 'index': 0},
-    {'name': 'transaction_count', 'dtype' : 'int', 'index': 1},
-    {'name': 'transaction_amount', 'dtype' : 'float', 'index': 2},
+    {'name': 'grade_number', 'dtype': 'int', 'index': 0},
+    {'name': 'grade_name', 'dtype': 'string', 'index': 1},
+    {'name': 'volume', 'dtype': 'float', 'index': 2},
+    {'name': 'sales_amount', 'dtype': 'float', 'index': 3},
+    {'name': 'percent_of_total', 'dtype': 'float', 'index': 4},
 ]
 
 def parse_pdf(filename, filepath, processed_utc):
@@ -38,9 +40,8 @@ def parse_pdf(filename, filepath, processed_utc):
 
     # Pulls Report Text
     parse_object.get_report_text(
-        add_more_characters=30,
-        skip_trailing_rows=1,
-        skip_mid_rows=['Sales', 'Cash', 'Other', 'Customers', 'No', 'CarWash', 'ReWash'],
+        skip_lead_rows=4,
+        skip_trailing_rows=6,
     )
 
     # Logic to identify columns in parsed words
@@ -49,6 +50,16 @@ def parse_pdf(filename, filepath, processed_utc):
     parsed_text = parse_object.cleaned_text
     parsed_words = parsed_text.split(' ')
 
+    '''
+        CUSTOM LOGIC
+
+        - fuels_sales_by_grade requires to remove 'Grade' from grade_number
+    '''
+    parsed_words = [ word for word in parsed_words if word != 'Grade' ]
+
+    # Rebuilds parsed_text variable without 'Grade'
+    parsed_text = ' '.join(parsed_words)
+
     column_phrases = helpers.combine_column_phrases(parsed_words)
 
     parsed_text = helpers.format_phrase_as_one_word(
@@ -56,9 +67,9 @@ def parse_pdf(filename, filepath, processed_utc):
         phrase_list=column_phrases
     )
 
+    # Processing Data
     parsed_words = parsed_text.split(' ')
 
-    # Processing Data
     data = parse_object.build_report_dictionary(
         word_list=parsed_words,
         columns=columns,
