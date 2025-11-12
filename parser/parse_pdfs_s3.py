@@ -65,8 +65,6 @@ def parse_report(
         create_s3_folder(folder_path=pdf_processed_folder)
         create_s3_folder(folder_path=csv_base_folder)
 
-        print('PROCESSING PDF:', filepath.split('/')[-1], '\n')
-
         results = []
         result = {}
 
@@ -135,7 +133,6 @@ def parse_report(
         for r in results:
             r['move_details'] = move_details
 
-        print('\nPDF Completed\n')
 
         return results
 
@@ -144,4 +141,6 @@ if __name__ == '__main__':
     files = get_all_pdf_files()
 
     for file in files:
+        print('PROCESSING PDF:', file.split('/')[-1], '\n')
         parse_report(filepath=file['filepath'])
+        print('\nPDF Completed\n')
