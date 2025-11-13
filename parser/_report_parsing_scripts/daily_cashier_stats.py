@@ -16,7 +16,7 @@ columns = [
     {'name': 'transaction_amount', 'dtype' : 'float', 'index': 2},
 ]
 
-def parse_pdf(filename, filepath, processed_utc):
+def parse_pdf(filename, filepath, processed_utc, s3_client=None):
     parse_object = ExtractReport(
         filename=filename,
         filepath=filepath,
@@ -24,6 +24,7 @@ def parse_pdf(filename, filepath, processed_utc):
         pdf_report_end_phrase=pdf_report_end_phrase,
         table_name=table_name,
         processed_utc=processed_utc,
+        s3_client=s3_client,
     )
 
     output = parse_object.output.copy()

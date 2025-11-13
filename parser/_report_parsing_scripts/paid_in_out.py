@@ -17,7 +17,7 @@ columns = [
 ]
 
 
-def sub_parse_pdf(filename, filepath, processed_utc, paid_in_or_out):
+def sub_parse_pdf(filename, filepath, processed_utc, paid_in_or_out, s3_client=None):
     if paid_in_or_out == 'paid_in':
         pdf_report_start_phrase = 'Paid In\nDate Time'
         pdf_report_end_phrase = 'Paid In Tender Totals'
@@ -32,6 +32,7 @@ def sub_parse_pdf(filename, filepath, processed_utc, paid_in_or_out):
         pdf_report_end_phrase=pdf_report_end_phrase,
         table_name=table_name,
         processed_utc=processed_utc,
+        s3_client=s3_client,
     )
 
     parse_object.output['sub_report_name'] = paid_in_or_out

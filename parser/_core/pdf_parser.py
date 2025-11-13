@@ -16,17 +16,18 @@ class ExtractReport:
         pdf_report_end_phrase,
         table_name,
         processed_utc,
-        location='s3',
+        s3_client=None,
     ):
         
         self.filename = filename
 
-        if location == 's3':
+        if s3_client:
             self.raw_text = helpers.read_from_s3(
+                client=s3_client,
                 bucket_name=filepath,
                 filename=filename
             )
-        elif location == 'local':
+        else:
             self.raw_text = helpers.read_from_file(
                 filepath=filepath,
                 filename=filename

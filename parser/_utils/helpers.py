@@ -2,7 +2,6 @@ from pypdf import PdfReader
 import csv
 from itertools import chain
 from dateutil import parser
-import boto3
 from io import BytesIO, StringIO
 
 import sys
@@ -10,29 +9,8 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from env import (
-    S3_ACCESS_KEY,
-    S3_SECRET_KEY,
-    S3_REGION,
-    S3_ENDPOINT,
-    S3_BUCKET,
-)
+from env import S3_BUCKET
 
-def connect_s3(
-    region=S3_REGION,
-    endpoint=S3_ENDPOINT,
-    access_key=S3_ACCESS_KEY,
-    secret_key=S3_SECRET_KEY,
-):
-    s3 = boto3.client(
-        's3',
-        region_name=region,
-        endpoint_url=endpoint,
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
-    )
-
-    return s3
 
 # Write csv file
 
@@ -42,8 +20,7 @@ def write_csv_local(dictionary, filename, destination='./'):
         writer.writeheader()
         writer.writerows(dictionary)
 
-def write_csv_s3(dictionary, filename, destination='./', bucket_name=S3_BUCKET):
-    s3 = connect_s3()
+def write_csv_s3(client, dictionary, filename, destination='./', bucket_name=S3_BUCKET):
 
     csv_buffer = StringIO()
     fieldnames = dictionary[0].keys()          # auto-detect columns from first dict
@@ -53,7 +30,7 @@ def write_csv_s3(dictionary, filename, destination='./', bucket_name=S3_BUCKET):
 
     full_filepath = f'{destination}{filename}'
 
-    s3.put_object(Bucket=bucket_name, Key=full_filepath, Body=csv_buffer.getvalue())
+    client.put_object(Bucket=bucket_name, Key=full_filepath, Body=csv_buffer.getvalue())
  
 
 # Read PDF Functions    
@@ -76,10 +53,9 @@ def read_from_file(filepath, filename):
 
     return text
 
-def read_from_s3(bucket_name, filename):
-    s3 = connect_s3()
+def read_from_s3(client, bucket_name, filename):
 
-    response = s3.get_object(Bucket=bucket_name, Key=filename)
+    response = client.get_object(Bucket=bucket_name, Key=filename)
     pdf_bytes = response['Body'].read()
     pdf_file = BytesIO(pdf_bytes)
 
@@ -311,46 +287,3 @@ def format_phrase_as_one_word(text, phrase_list):
 
     return text
 
-# S3 Orchestration
-
-def get_files_s3_folder(prefix, bucket_name=S3_BUCKET):
-    s3 = connect_s3()
-
-    prefix = 'pdf_files/to_be_processed/'
-
-    objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-
-    if 'Contents' in objects:
-        filepaths = [
-            obj['Key'] for obj in objects['Contents']
-                if obj['Key'] != prefix and not obj['Key'].endswith('/processed/')
-        ]
-    else:
-        filepaths = []
-
-    return filepaths
-
-def create_s3_folder(folder_path, bucket_name=S3_BUCKET):
-    s3 = connect_s3()
-
-    s3.put_object(Bucket=bucket_name, Key=folder_path)
-
-    return {
-        'folder': folder_path
-    }
-
-def move_s3_file(source, destination, bucket_name=S3_BUCKET, test=False):
-    s3 = connect_s3()
-
-    if test is False:
-        copy_source = {'Bucket': bucket_name, 'Key': source}
-        s3.copy_object(Bucket=bucket_name, CopySource=copy_source, Key=destination)
-        s3.delete_object(Bucket=bucket_name, Key=source)
-    elif test is True:
-        s3.head_object(Bucket=bucket_name, Key=source)
-        s3.head_object(Bucket=bucket_name, Key=destination)
-
-    return {
-        'source': source,
-        'destination': destination,
-    }
