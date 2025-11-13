@@ -1,0 +1,36 @@
+import os
+from pathlib import Path
+
+env_path = Path(__file__).resolve().parent / '.env'
+
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=env_path)
+
+PROJECT_DIRECTORY = Path(__file__).resolve().parent
+
+EXTRACT_DIR_RELATIVE = os.environ['EXTRACT_DIR_RELATIVE']
+EXTRACT_DIR = os.path.join(PROJECT_DIRECTORY, EXTRACT_DIR_RELATIVE)
+
+PIPELINES_DIR_RELATIVE = os.environ['PIPELINES_DIR_RELATIVE']
+PIPELINES_DIR = os.path.join(PROJECT_DIRECTORY, PIPELINES_DIR_RELATIVE)
+
+S3_ACCESS_KEY = os.getenv('S3_ACCESS_KEY')
+S3_SECRET_KEY = os.getenv('S3_SECRET_KEY')
+S3_REGION = os.getenv('S3_REGION')
+S3_ENDPOINT = os.getenv('S3_ENDPOINT')
+S3_BUCKET = os.getenv('S3_BUCKET')
+S3_PATHS_RAW = os.getenv('S3_PATHS')
+S3_PATHS = [ path.strip() for path in S3_PATHS_RAW.split(',') ]
+
+PDF_TO_BE_PROCESSED_FOLDER_S3 = os.getenv('PDF_TO_BE_PROCESSED_FOLDER_S3')
+PDF_PROCESSED_FOLDER_S3 = os.getenv('PDF_PROCESSED_FOLDER_S3')
+CSV_BASE_FOLDER_S3 = os.getenv('CSV_BASE_FOLDER_S3')
+
+POSTGRES_USER = os.environ['POSTGRES_USER']
+POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
+POSTGRES_HOST = os.environ['POSTGRES_HOST']
+POSTGRES_PORT = os.environ['POSTGRES_PORT']
+POSTGRES_DB = os.environ['POSTGRES_DB']
+POSTGRES_CERTIFICATION = os.environ['POSTGRES_CERTIFICATION']
+POSTGRES_CERTIFICATION_PATH = os.path.join(PROJECT_DIRECTORY, POSTGRES_CERTIFICATION)
+POSTGRES_TABLES_PREFIX = os.environ['POSTGRES_TABLES_PREFIX']
