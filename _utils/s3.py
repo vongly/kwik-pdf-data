@@ -20,8 +20,6 @@ def connect_s3(
 
 def get_files_s3_folder(client, prefix, bucket_name):
 
-    prefix = 'pdf_files/to_be_processed/'
-
     objects = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
 
     if 'Contents' in objects:

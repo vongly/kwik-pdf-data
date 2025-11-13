@@ -125,13 +125,13 @@ def parse_report(
                 try:
                     # Report Written
                     report_folder_path = f'{csv_base_folder}{report_name}/'
-                    create_s3_folder(
-                        client=s3_client,
-                        folder_path=report_folder_path,
-                        bucket_name=S3_BUCKET,
-                    )
 
                     if test is False:
+                        create_s3_folder(
+                            client=s3_client,
+                            folder_path=report_folder_path,
+                            bucket_name=S3_BUCKET,
+                        )
                         write_csv_s3(
                             client=s3_client,
                             dictionary=r['data'],
