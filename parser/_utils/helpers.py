@@ -8,7 +8,7 @@ from io import BytesIO, StringIO
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from env import (
     S3_ACCESS_KEY,

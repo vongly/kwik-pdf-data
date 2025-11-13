@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import dateutil
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from _core.pdf_parser import ExtractReport
 from _utils import helpers, safe_drops
