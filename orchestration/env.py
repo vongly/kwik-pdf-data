@@ -1,8 +1,9 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 
 env_path = Path(__file__).resolve().parent / '.env'
+
+from dotenv import load_dotenv
 load_dotenv(dotenv_path=env_path)
 
 ROOT_DIR = Path(__file__).resolve().parent.parent

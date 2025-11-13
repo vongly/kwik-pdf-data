@@ -4,8 +4,7 @@ from prefect import task
 import sys
 from pathlib import Path
 
-parent_dir = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(parent_dir))
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from _utils.helpers import run_py_file
 

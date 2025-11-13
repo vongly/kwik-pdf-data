@@ -141,6 +141,6 @@ if __name__ == '__main__':
     files = get_all_pdf_files()
 
     for file in files:
-        print('PROCESSING PDF:', file.split('/')[-1], '\n')
+        print('PROCESSING PDF:', file['filepath'].split('/')[-1], '\n')
         parse_report(filepath=file['filepath'])
         print('\nPDF Completed\n')
