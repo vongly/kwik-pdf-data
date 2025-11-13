@@ -3,7 +3,7 @@ from prefect import flow
 import sys
 from pathlib import Path
 
-parent_dir = Path(__file__).resolve().parents[2]
+parent_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(parent_dir))
 
 from tasks.parser import parse_pdfs_s3_test
