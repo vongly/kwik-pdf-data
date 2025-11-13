@@ -5,8 +5,7 @@ import re
 
 import duckdb
 
-parent_dir = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(parent_dir))
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from env import (
     PROJECT_DIRECTORY,
