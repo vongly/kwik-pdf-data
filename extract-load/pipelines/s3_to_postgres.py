@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from _core.pipeline import LoadPipelineS3
 
@@ -20,7 +20,7 @@ from env import (
     S3_REGION,
     S3_ENDPOINT,
     S3_BUCKET,
-    S3_PATHS,
+    S3_REPORT_FOLDERS_PATH_BASE,
 )
 
 S3_DETAILS = {
@@ -31,11 +31,31 @@ S3_DETAILS = {
     'bucket_name':S3_BUCKET,
 }
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+
+from _utils.s3 import get_files_s3_folder, connect_s3
+
+s3_client = connect_s3(
+    region=S3_REGION,
+    endpoint=S3_ENDPOINT,
+    access_key=S3_ACCESS_KEY,
+    secret_key=S3_SECRET_KEY,
+)
+
+all_reports_and_folders = get_files_s3_folder(
+    client=s3_client,
+    bucket_name=S3_BUCKET,
+    prefix=S3_REPORT_FOLDERS_PATH_BASE,
+)
+
+S3_REPORT_FOLDER_PATHS = [ obj for obj in all_reports_and_folders if obj.endswith('/') ]
+
+
 class FullPipeline:
     def __init__(
         self,
         call=S3Call,
-        objects=S3_PATHS,
+        objects=S3_REPORT_FOLDER_PATHS,
         test=False
     ):
 

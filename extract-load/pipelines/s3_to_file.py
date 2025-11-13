@@ -9,20 +9,32 @@ from _utils.connections.s3 import S3Call
 from _utils.helpers import pretty_all_jsons
 
 from env import (
-    POSTGRES_USER,
-    POSTGRES_PASSWORD,
-    POSTGRES_HOST,
-    POSTGRES_PORT,
-    POSTGRES_DB,
-    POSTGRES_CERTIFICATION,
-    POSTGRES_TABLES_PREFIX,
     S3_ACCESS_KEY,
     S3_SECRET_KEY,
     S3_REGION,
     S3_ENDPOINT,
     S3_BUCKET,
-    S3_PATHS,
+    S3_REPORT_FOLDERS_PATH_BASE,
 )
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+
+from _utils.s3 import get_files_s3_folder, connect_s3
+
+s3_client = connect_s3(
+    region=S3_REGION,
+    endpoint=S3_ENDPOINT,
+    access_key=S3_ACCESS_KEY,
+    secret_key=S3_SECRET_KEY,
+)
+
+all_reports_and_folders = get_files_s3_folder(
+    client=s3_client,
+    bucket_name=S3_BUCKET,
+    prefix=S3_REPORT_FOLDERS_PATH_BASE,
+)
+
+S3_REPORT_FOLDER_PATHS = [ obj for obj in all_reports_and_folders if obj.endswith('/') ]
 
 S3_DETAILS = {
     'region': S3_REGION,
@@ -36,7 +48,7 @@ class FullPipeline:
     def __init__(
         self,
         call=S3Call,
-        objects=S3_PATHS,
+        objects=S3_REPORT_FOLDER_PATHS,
         test=False
     ):
 

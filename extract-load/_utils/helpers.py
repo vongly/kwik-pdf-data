@@ -12,6 +12,7 @@ from env import (
     EXTRACT_DIR,
 )
 
+
 def print_pipeline_details(pipeline):
     pipeline_name = pipeline.pipeline_name
     destination = pipeline.destination.__class__.__name__.lower()
@@ -143,4 +144,3 @@ def convert_data_files_to_parquet():
         })
 
     return output
-
