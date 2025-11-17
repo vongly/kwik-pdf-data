@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: card_transaction_counts
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: daily_cashier_stats
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: daily_reports
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: daily_sales_summary
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: department_sales
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: fuel_dispenser_sales
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: fuel_sales_by_grade
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: paid_in_out
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+      - name: transaction_type
+        tests:
+        - accepted_values:
+            values: ['paid_in', 'paid_out']
+  - name: safe_drops
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: tax_summary
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique
+  - name: tender_summary
+    columns:
+      - name: id
+        tests:
+        - not_null
+        - unique

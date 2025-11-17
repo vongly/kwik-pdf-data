@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: kwik_data_raw
+    schema: "{{ env_var('KWIK_RAW_SCHEMA') }}"
+    loader: "postgres"
+    tables:
+      - name: card_transaction_counts_raw
+        identifier: card_transaction_counts
+      - name: daily_cashier_stats_raw
+        identifier: daily_cashier_stats
+      - name: daily_reports_raw
+        identifier: daily_reports
+      - name: daily_sales_summary_raw
+        identifier: daily_sales_summary
+      - name: department_sales_raw
+        identifier: department_sales
+      - name: fuel_dispenser_sales_raw
+        identifier: fuel_dispenser_sales
+      - name: fuel_sales_by_grade_raw
+        identifier: fuel_sales_by_grade
+      - name: paid_in_out_raw
+        identifier: paid_in_out
+      - name: safe_drops_raw
+        identifier: safe_drops
+      - name: tax_summary_raw
+        identifier: tax_summary
+      - name: tender_summary_raw
+        identifier: tender_summary

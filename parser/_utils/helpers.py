@@ -217,18 +217,20 @@ def build_report_dictionary(word_list, columns=None, **kwargs):
     return data
 
 def clean_field_values(dictionary_list, columns):
-    for row in dictionary_list:
-        if columns:
-            for col in columns:
-                name = col['name']
-                dtype = col['dtype']
+    if dictionary_list:
+        for i, row in enumerate(dictionary_list):
+            row['row_index'] = i
+            if columns:
+                for col in columns:
+                    name = col['name']
+                    dtype = col['dtype']
 
-                if dtype in ['string']:
-                    row[name] = row[name].replace('**',' ')
-                if dtype in ['float']:
-                    row[name] = float(row[name].replace('$','').replace('%','').replace(',',''))
-                if dtype in ['int']:
-                    row[name] = int(row[name].replace('$','').replace('%','').replace(',',''))
+                    if dtype in ['string']:
+                        row[name] = row[name].replace('**',' ')
+                    if dtype in ['float']:
+                        row[name] = float(row[name].replace('$','').replace('%','').replace(',',''))
+                    if dtype in ['int']:
+                        row[name] = int(row[name].replace('$','').replace('%','').replace(',',''))
 
 
 def parse_datetime_parts(word_list):

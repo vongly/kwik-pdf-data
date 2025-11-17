@@ -50,7 +50,6 @@ all_reports_and_folders = get_files_s3_folder(
 
 S3_REPORT_FOLDER_PATHS = [ obj for obj in all_reports_and_folders if obj.endswith('/') ]
 
-
 class FullPipeline:
     def __init__(
         self,
@@ -63,14 +62,14 @@ class FullPipeline:
 
         self.objects = objects
         self.test = test
-
+        print(test)
         self.pipeline = None
         self.resources = None
 
     def create_pipeline(self):
         self.pipeline = LoadPipelineS3(
             pipeline_name='kwik_pdf_s3_to_postgres',
-            dataset='kwik_pdf_raw',
+            dataset='kwik_data_raw',
             destination='postgres',
             test=self.test
         )

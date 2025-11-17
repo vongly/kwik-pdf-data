@@ -1,0 +1,27 @@
+kwik_data:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DB_HOST_DEV') }}"
+      user: "{{ env_var('DB_USER_DEV') }}"
+      password: "{{ env_var('DB_PASSWORD_DEV') }}"
+      dbname: "{{ env_var('DB_NAME_DEV') }}"
+      port: "{{ env_var('DB_PORT_DEV') | int  }}"
+      schema: analytics
+      threads: 4
+      keepalives_idle: 0
+      connect_timeout: 10
+      sslmode: prefer
+    prod:
+      type: postgres
+      host: "{{ env_var('DB_HOST_PROD') }}"
+      user: "{{ env_var('DB_USER_PROD') }}"
+      password: "{{ env_var('DB_PASSWORD_PROD') }}"
+      dbname: "{{ env_var('DB_NAME_PROD') }}"
+      port: "{{ env_var('DB_PORT_PROD') | int  }}"
+      schema: analytics
+      threads: 8
+      keepalives_idle: 0
+      connect_timeout: 10
+      sslmode: require

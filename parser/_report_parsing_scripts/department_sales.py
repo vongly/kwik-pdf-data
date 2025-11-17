@@ -11,7 +11,7 @@ pdf_report_start_phrase = 'Department Sales Report'
 pdf_report_end_phrase = '100%'
 
 columns = [
-    {'name': 'department_name', 'dtype': 'description', 'index': 0},
+    {'name': 'department_name', 'dtype': 'string', 'index': 0},
     {'name': 'gross_sales', 'dtype': 'float', 'index': 1},
     {'name': 'item_count', 'dtype': 'int', 'index': 2},
     {'name': 'refund_count', 'dtype': 'int', 'index': 3},

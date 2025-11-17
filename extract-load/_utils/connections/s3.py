@@ -24,6 +24,9 @@ class S3Call():
 
         con = duckdb.connect()
 
+        if not incremental:
+            incremental = {'value': None}
+
         if where_clause and not incremental['value']:
             pass # -> where_clause = where_clause
         elif not where_clause and incremental['value']:
@@ -36,7 +39,7 @@ class S3Call():
         if self.test:
             if not self.test_limit or self.test_limit < 1:
                 self.test_limit = 1
-        
+
         limit_clause = f' LIMIT {self.test_limit}' if self.test else ''
 
         if filetype == 'csv':
@@ -110,7 +113,6 @@ if __name__ == '__main__':
         S3_REGION,
         S3_ENDPOINT,
         S3_BUCKET,
-        S3_PATHS,
     )
 
     S3_DETAILS = {
@@ -122,8 +124,27 @@ if __name__ == '__main__':
     }
     call = S3Call()
 
-    call.yield_records(
-        object_name='parsed_reports/to_be_uploaded/fuel_sales_by_grade/',
-        filetype='csv',
-        s3_details=S3_DETAILS,
-    )
+    folders = [
+        'card_transaction_counts',
+        'daily_cashier_stats',
+        'daily_reports',
+        'daily_sales_summary',
+        'department_sales',
+        'fuel_dispenser_sales',
+        'fuel_sales_by_grade',
+        'paid_in_out',
+        'safe_drops',
+        'tax_summary',
+        'tender_summary',
+    ]
+
+    for f in folders:
+        print(f)
+        x = call.yield_records(
+            object_name=f'parsed_reports/{f}/',
+            filetype='csv',
+            s3_details=S3_DETAILS,
+        )
+
+        if not x:
+            print('no records')

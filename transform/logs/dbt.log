@@ -1,0 +1,32 @@
+[0m10:43:22.622794 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1054984d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105681250>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105680fe0>]}
+
+
+============================== 10:43:22.633447 | d1c86c12-b01c-4b1a-b0b8-d71007e0e720 ==============================
+[0m10:43:22.633447 [info ] [MainThread]: Running with dbt=1.10.15
+[0m10:43:22.634209 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'profiles_dir': '/Users/vongly/.dbt', 'partial_parse': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'quiet': 'False', 'empty': 'None', 'log_path': 'logs', 'use_experimental_parser': 'False', 'version_check': 'True', 'log_cache_events': 'False', 'debug': 'False', 'use_colors': 'True', 'introspect': 'True', 'indirect_selection': 'eager', 'warn_error': 'None', 'write_json': 'True', 'invocation_command': 'dbt init kwik_data', 'static_parser': 'True', 'no_print': 'None', 'send_anonymous_usage_stats': 'True', 'fail_fast': 'False'}
+[0m10:43:22.648672 [debug] [MainThread]: Starter project path: /Users/vongly/dev/python/pdf-text/transform/.venv/lib/python3.12/site-packages/dbt/include/starter_project
+[0m10:43:22.657427 [info ] [MainThread]: 
+Your new dbt project "kwik_data" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m10:43:22.658047 [info ] [MainThread]: Setting up your profile.
+[0m10:43:22.667897 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No adapters available. Learn how to install an adapter by going to https://docs.getdbt.com/docs/connect-adapters#install-using-the-cli
+[0m10:43:22.685988 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": false, "command_wall_clock_time": 0.1637541, "process_in_blocks": "0", "process_kernel_time": 0.240984, "process_mem_max_rss": "98033664", "process_out_blocks": "0", "process_user_time": 1.77281}
+[0m10:43:22.687295 [debug] [MainThread]: Command `dbt init` failed at 10:43:22.687034 after 0.17 seconds
+[0m10:43:22.688027 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1056810d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1055422a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105478140>]}
+[0m10:43:22.688694 [debug] [MainThread]: Flushing usage events
+[0m10:43:23.258290 [debug] [MainThread]: An error was encountered while trying to flush usage events

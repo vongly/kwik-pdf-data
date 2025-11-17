@@ -1,0 +1,19 @@
+import subprocess
+from prefect import flow
+
+import sys
+from pathlib import Path
+
+from run_parser import run_parser
+from run_extract_load import run_extract_load
+from run_transformations import run_transformations
+
+@flow(name='Full Data Pipeline')
+def full_pipeline_flow():
+    
+    run_parser()
+    run_extract_load()
+    run_transformations()
+
+if __name__ == '__main__':
+    full_pipeline_flow()

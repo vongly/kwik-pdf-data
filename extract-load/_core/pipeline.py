@@ -148,7 +148,7 @@ class LoadPipelineS3:
         resources = [
             APIResource(
                 object_name=source,
-                api_call=api_call(),
+                api_call=api_call(test=self.test),
                 incremental_attribute=incremental_attribute,
                 write_disposition=write_disposition,
                 table_name_suffix=table_name_suffix, # Optional
@@ -173,7 +173,7 @@ class LoadPipelineS3:
         resources = [
             DatabaseResource(
                 object_name=source,
-                db_call=db_call(),
+                db_call=db_call(test=self.test),
                 incremental_attribute=incremental_attribute,
                 write_disposition=write_disposition,
                 schema=schema,                       # schema not required for embedded db's
@@ -198,7 +198,7 @@ class LoadPipelineS3:
 
         resources = [
             FileResource(
-                call=call(),
+                call=call(test=self.test),
                 object_name=source,
                 incremental_attribute=incremental_attribute,
                 write_disposition=write_disposition,

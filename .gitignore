@@ -6,3 +6,5 @@ project.yml
 
 *.sql
 *__pycache__
+
+docker-compose.yml
