@@ -1,13 +1,12 @@
 import subprocess
 from prefect import flow, task, get_run_logger
 
-import sys, os, io
+import sys, os
 from pathlib import Path
 
 from dotenv import load_dotenv
 
-parent_dir = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(parent_dir))
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from env import (
     DBT_DIR,
