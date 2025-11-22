@@ -7,5 +7,6 @@ project.yml
 *.crt
 *.sql
 *__pycache__
+.dlt
 
 docker-compose.yml
