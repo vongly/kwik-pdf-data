@@ -15,3 +15,8 @@ S3_BUCKET = os.getenv('S3_BUCKET')
 PDF_TO_BE_PROCESSED_FOLDER_S3 = os.getenv('PDF_TO_BE_PROCESSED_FOLDER_S3')
 PDF_PROCESSED_FOLDER_S3 = os.getenv('PDF_PROCESSED_FOLDER_S3')
 CSV_BASE_FOLDER_S3 = os.getenv('CSV_BASE_FOLDER_S3')
+
+if __name__ == '__main__':
+    for name, value in list(globals().items()):
+        if name.isupper():
+            print(f'{name} = {value}')

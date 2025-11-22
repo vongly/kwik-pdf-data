@@ -4,6 +4,7 @@ project.yml
 
 *reports
 
+*.crt
 *.sql
 *__pycache__
 

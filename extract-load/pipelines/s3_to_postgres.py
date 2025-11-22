@@ -9,12 +9,12 @@ from _utils.connections.s3 import S3Call
 from _utils.helpers import pretty_all_jsons
 
 from env import (
-    POSTGRES_USER,
-    POSTGRES_PASSWORD,
-    POSTGRES_HOST,
-    POSTGRES_PORT,
-    POSTGRES_DB,
-    POSTGRES_CERTIFICATION,
+    POSTGRES_USER_PROD,
+    POSTGRES_PASSWORD_PROD,
+    POSTGRES_HOST_PROD,
+    POSTGRES_PORT_PROD,
+    POSTGRES_DB_PROD,
+    POSTGRES_CERTIFICATION_PROD,
     S3_ACCESS_KEY,
     S3_SECRET_KEY,
     S3_REGION,
@@ -53,33 +53,54 @@ S3_REPORT_FOLDER_PATHS = [ obj for obj in all_reports_and_folders if obj.endswit
 class FullPipeline:
     def __init__(
         self,
+        pipeline_name='kwik_pdf_s3_to_postgres',
+        dataset='kwik_data_raw',
         call=S3Call,
+        s3_details=S3_DETAILS,
         objects=S3_REPORT_FOLDER_PATHS,
-        test=False
+        db_host=POSTGRES_HOST_PROD,
+        db_port=POSTGRES_PORT_PROD,
+        db_user=POSTGRES_USER_PROD,
+        db_password=POSTGRES_PASSWORD_PROD,
+        db_database=POSTGRES_DB_PROD,
+        db_certification_path=POSTGRES_CERTIFICATION_PROD,
+        test=False,
     ):
 
+        self.pipeline_name = pipeline_name
+        self.dataset = dataset
+        
         self.call = call
+        self.s3_details = s3_details
 
         self.objects = objects
+
+        self.db_host = db_host
+        self.db_port = db_port
+        self.db_user = db_user
+        self.db_password = db_password
+        self.db_database = db_database
+        self.db_certification_path = db_certification_path
+
         self.test = test
-        print(test)
+
         self.pipeline = None
         self.resources = None
 
     def create_pipeline(self):
         self.pipeline = LoadPipelineS3(
-            pipeline_name='kwik_pdf_s3_to_postgres',
-            dataset='kwik_data_raw',
+            pipeline_name=self.pipeline_name,
+            dataset=self.dataset,
             destination='postgres',
-            test=self.test
+            test=self.test,
         )
         self.pipeline.build_destination_db_env(
-            host=POSTGRES_HOST,
-            port=POSTGRES_PORT,
-            user=POSTGRES_USER,
-            password=POSTGRES_PASSWORD,
-            database=POSTGRES_DB,
-            certification_path=POSTGRES_CERTIFICATION,
+            host=self.db_host,
+            port=self.db_port,
+            user=self.db_user,
+            password=self.db_password,
+            database=self.db_database,
+            certification_path=self.db_certification_path,
         )
         return self.pipeline
 
@@ -89,7 +110,7 @@ class FullPipeline:
             sources=self.objects,
             incremental_attribute='processed_utc',
             write_disposition='append',
-            s3_details=S3_DETAILS,
+            s3_details=self.s3_details,
         )
         return self.resources
 
