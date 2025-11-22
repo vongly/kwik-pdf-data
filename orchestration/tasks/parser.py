@@ -10,7 +10,7 @@ from _utils.helpers import run_py_file
 
 from env import (
     PARSE_PDFS_S3_PATH,
-    PARSE_PDFS_S3_PATH_TEST,
+    PARSE_PDFS_S3_TEST_PATH,
     PARSE_PDFS_S3_PYTHON_EXEC_PATH,
 )
 
@@ -25,7 +25,7 @@ def parse_pdfs_s3():
 @task(name='Test Parse PDF Files from S3 Bucket')
 def parse_pdfs_s3_test():
     run_py_file(
-        filepath=PARSE_PDFS_S3_PATH_TEST,
+        filepath=PARSE_PDFS_S3_TEST_PATH,
         python_exec_path=PARSE_PDFS_S3_PYTHON_EXEC_PATH,
     )
 
