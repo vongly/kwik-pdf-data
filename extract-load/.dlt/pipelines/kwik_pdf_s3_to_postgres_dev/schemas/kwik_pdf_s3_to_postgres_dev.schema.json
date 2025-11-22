@@ -1,0 +1,694 @@
+{
+  "version": 2,
+  "version_hash": "3fPzuscyHGTGZSXS0WlD4XcsmVfC+68CaKxQpMF/Sig=",
+  "engine_version": 11,
+  "name": "kwik_pdf_s3_to_postgres_dev",
+  "tables": {
+    "_dlt_version": {
+      "name": "_dlt_version",
+      "columns": {
+        "version": {
+          "name": "version",
+          "data_type": "bigint",
+          "nullable": false
+        },
+        "engine_version": {
+          "name": "engine_version",
+          "data_type": "bigint",
+          "nullable": false
+        },
+        "inserted_at": {
+          "name": "inserted_at",
+          "data_type": "timestamp",
+          "nullable": false
+        },
+        "schema_name": {
+          "name": "schema_name",
+          "data_type": "text",
+          "nullable": false
+        },
+        "version_hash": {
+          "name": "version_hash",
+          "data_type": "text",
+          "nullable": false
+        },
+        "schema": {
+          "name": "schema",
+          "data_type": "text",
+          "nullable": false
+        }
+      },
+      "write_disposition": "skip",
+      "resource": "_dlt_version",
+      "description": "Created by DLT. Tracks schema updates"
+    },
+    "_dlt_loads": {
+      "name": "_dlt_loads",
+      "columns": {
+        "load_id": {
+          "name": "load_id",
+          "data_type": "text",
+          "nullable": false,
+          "precision": 64
+        },
+        "schema_name": {
+          "name": "schema_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "status": {
+          "name": "status",
+          "data_type": "bigint",
+          "nullable": false
+        },
+        "inserted_at": {
+          "name": "inserted_at",
+          "data_type": "timestamp",
+          "nullable": false
+        },
+        "schema_version_hash": {
+          "name": "schema_version_hash",
+          "data_type": "text",
+          "nullable": true
+        }
+      },
+      "write_disposition": "skip",
+      "resource": "_dlt_loads",
+      "description": "Created by DLT. Tracks completed loads"
+    },
+    "daily_reports": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "original_filename": {
+          "name": "original_filename",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "report_date": {
+          "name": "report_date",
+          "data_type": "date",
+          "nullable": true
+        },
+        "operator_name": {
+          "name": "operator_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "operator_id": {
+          "name": "operator_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "software_version": {
+          "name": "software_version",
+          "data_type": "text",
+          "nullable": true
+        },
+        "report_printed_at": {
+          "name": "report_printed_at",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "report_period_start": {
+          "name": "report_period_start",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "report_period_end": {
+          "name": "report_period_end",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "daily_reports",
+      "resource": "daily_reports",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "daily_sales_summary": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "original_filename": {
+          "name": "original_filename",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "summary_description": {
+          "name": "summary_description",
+          "data_type": "text",
+          "nullable": true
+        },
+        "amount": {
+          "name": "amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "daily_sales_summary",
+      "resource": "daily_sales_summary",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "department_sales": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "original_filename": {
+          "name": "original_filename",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "department_name": {
+          "name": "department_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "gross_sales": {
+          "name": "gross_sales",
+          "data_type": "double",
+          "nullable": true
+        },
+        "item_count": {
+          "name": "item_count",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "refund_count": {
+          "name": "refund_count",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "net_count": {
+          "name": "net_count",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "refund_amount": {
+          "name": "refund_amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "discount_amount": {
+          "name": "discount_amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "net_sales": {
+          "name": "net_sales",
+          "data_type": "double",
+          "nullable": true
+        },
+        "percent_sales": {
+          "name": "percent_sales",
+          "data_type": "double",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "department_sales",
+      "resource": "department_sales",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "fuel_sales_by_grade": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "original_filename": {
+          "name": "original_filename",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "grade_number": {
+          "name": "grade_number",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "grade_name": {
+          "name": "grade_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "volume": {
+          "name": "volume",
+          "data_type": "double",
+          "nullable": true
+        },
+        "sales_amount": {
+          "name": "sales_amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "percent_of_total": {
+          "name": "percent_of_total",
+          "data_type": "double",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "fuel_sales_by_grade",
+      "resource": "fuel_sales_by_grade",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "paid_in_out": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "original_filename": {
+          "name": "original_filename",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "transaction_type": {
+          "name": "transaction_type",
+          "data_type": "text",
+          "nullable": true
+        },
+        "transaction_timestamp": {
+          "name": "transaction_timestamp",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "account_description": {
+          "name": "account_description",
+          "data_type": "text",
+          "nullable": true
+        },
+        "amount": {
+          "name": "amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "tender_type": {
+          "name": "tender_type",
+          "data_type": "text",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "paid_in_out",
+      "resource": "paid_in_out",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "safe_drops": {
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "data_type": "text",
+          "nullable": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "processed_utc": {
+          "name": "processed_utc",
+          "incremental": true,
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "register_number": {
+          "name": "register_number",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "cashier_name": {
+          "name": "cashier_name",
+          "data_type": "text",
+          "nullable": true
+        },
+        "pouch_envelope_number": {
+          "name": "pouch_envelope_number",
+          "data_type": "text",
+          "nullable": true
+        },
+        "drop_amount": {
+          "name": "drop_amount",
+          "data_type": "double",
+          "nullable": true
+        },
+        "tender_type": {
+          "name": "tender_type",
+          "data_type": "text",
+          "nullable": true
+        },
+        "total_drop": {
+          "name": "total_drop",
+          "data_type": "double",
+          "nullable": true
+        },
+        "drop_time": {
+          "name": "drop_time",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "row_index": {
+          "name": "row_index",
+          "data_type": "bigint",
+          "nullable": true
+        },
+        "_dlt_processed_utc": {
+          "name": "_dlt_processed_utc",
+          "data_type": "timestamp",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "csv",
+      "name": "safe_drops",
+      "resource": "safe_drops",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    },
+    "_dlt_pipeline_state": {
+      "columns": {
+        "version": {
+          "name": "version",
+          "data_type": "bigint",
+          "nullable": false
+        },
+        "engine_version": {
+          "name": "engine_version",
+          "data_type": "bigint",
+          "nullable": false
+        },
+        "pipeline_name": {
+          "name": "pipeline_name",
+          "data_type": "text",
+          "nullable": false
+        },
+        "state": {
+          "name": "state",
+          "data_type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "data_type": "timestamp",
+          "nullable": false
+        },
+        "version_hash": {
+          "name": "version_hash",
+          "data_type": "text",
+          "nullable": true
+        },
+        "_dlt_load_id": {
+          "name": "_dlt_load_id",
+          "data_type": "text",
+          "nullable": false,
+          "precision": 64
+        },
+        "_dlt_id": {
+          "name": "_dlt_id",
+          "data_type": "text",
+          "nullable": false,
+          "unique": true,
+          "row_key": true
+        }
+      },
+      "write_disposition": "append",
+      "file_format": "preferred",
+      "name": "_dlt_pipeline_state",
+      "resource": "_dlt_pipeline_state",
+      "x-normalizer": {
+        "seen-data": true
+      }
+    }
+  },
+  "settings": {
+    "detections": [
+      "iso_timestamp"
+    ],
+    "default_hints": {
+      "not_null": [
+        "_dlt_id",
+        "_dlt_root_id",
+        "_dlt_parent_id",
+        "_dlt_list_idx",
+        "_dlt_load_id"
+      ],
+      "parent_key": [
+        "_dlt_parent_id"
+      ],
+      "root_key": [
+        "_dlt_root_id"
+      ],
+      "unique": [
+        "_dlt_id"
+      ],
+      "row_key": [
+        "_dlt_id"
+      ]
+    }
+  },
+  "normalizers": {
+    "names": "snake_case",
+    "json": {
+      "module": "dlt.common.normalizers.json.relational"
+    }
+  },
+  "previous_hashes": [
+    "4W0wPPUIfKRPCUQQB5nFkHWt0bAWi/cUBzROkuuL0bI=",
+    "jDKLNb2Rtt+yGo+23c5SN4/4JEhicnk1oNjLnO2JK4s="
+  ]
+}

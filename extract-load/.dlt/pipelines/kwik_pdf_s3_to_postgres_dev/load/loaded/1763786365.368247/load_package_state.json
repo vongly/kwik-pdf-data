@@ -1,0 +1,15 @@
+{
+  "_state_version": 1,
+  "_state_engine_version": 1,
+  "created_at": "\uf0272025-11-22T04:39:25.368247+00:00",
+  "_version_hash": "urASGtnyA2b5lZq8EYCLcOZj1xTZvbxixRnvy5qFG2A=",
+  "pipeline_state": {
+    "version": 1,
+    "engine_version": 4,
+    "pipeline_name": "kwik_pdf_s3_to_postgres_dev",
+    "state": "eNrFld2SojgUx9/FW3YG+RLoqr2gVVRURIFG3JqiAgT5DkJAcGqq9m328fYVNkx3787cTO1dcwW/nJz8zz8n4evEazDA0Otg3SSonDwxv70jWF6T8ocR/rdJCCPQ5thrghgWwCtBASdPk+yeZF4VRl7DeRh5FWrwtYaNF8JuQuYADBqIfwoemVeDOxmukgrm4zr/K9kPCzeTpz9+Gf1l1NvgpASY6PfwUI35wxx//gE3n9/nTH4Of5VTtnlODHnzwItBE5McHLOEQxiBi88ogZiX9SXBMBazpKZlVwCKCxQ5MNcqnR5/H0Wjtg5GvV9/qZcMk9f/YhsQQS+sUfX9KymDGhawxCAfP6sakbAGhl6Lg9fxBCcg9zqQt/8Kz0GD38nk7z//Yqes8IlhPrGMxU6fuNnTVPo8k4Upx3yaSk/TKRHblsmthd8rfbW4u+Zz/rGexxq+wiLY3JBYkrgrHVLPLVgdaK70pcv+IEgmwZulpNJD4DfxaeVe0piBUk9wPdgiUxdqE1GHi7jioodvEBwZsG79SjP3J+kxtNm9oPcEw43Mav2SrvqB83dat2vaMUmnTCU1zh2J4RsppVUdl+1oL7zvjlV+F90YgMPcMG9GTfC8SSKMGWdZbFgOm/iAmFH3yYb5PHUFg5pp5oWF+7OQETylrbaTbzRmt9o83O73KoKTL9++fSMdCpLQS0oPtfhDN+KFd3Zg7fPn8GV25tyELwqXxN14rbzdjS7T8nj1MO8w2MDRQwcNkjOLbVadxm0gn0/bzbg/asXMqT2fc/EKGbTJ56xKMFDXbr0EYa+ZG2bYZ0ddGs0C807bIuEqDPIJKdnxtrxyBKtotiw6uXJ4J53RLNo+S2uCU0tyTtshzctsyVzb2d1e2m8eRi3MvQbkpNX9wbvWIIQf6uVhdY5d+mHpQivm4KKsynK0obBoEyW67t+TntNOGXfZHQneqYNec0taegTTIevPmm2Jb4WFsAI1Hkt4Le9Dq9olbj5QqmwrdQ79hSCdV+O5UbK9nFCb8b5CG76XN1S8JFg8xObOeOGtQrN7aDHPqQIIPjCpUKqH6P6AgYM2kPK1M8HPLnLrVdDd0CxtjnTfnyuLYPrILrIFvvfqFSiLHp3qwCHYibI2omeSyWS6IgtINObMeFQl6GuLvjVCFmn4bF3R1iYYI0s/Zj2iGHDsCp8ClDwuuW6v6lWjDe65cKOFqWx5nR87+wSHlIl1pj9IaSej7YstEWwJsh4FgX24YMG5nONq2Y1JFPoULBa6OOxbTeJs38epPN4O6/nLPc1sVB0fs5wSzv0sJ3jG5yeOEqZpPGuux+NLd5a3BPts7Kj0jTHqgQqAqb3E0fO4pL0d1M42jDqhVGpBrx/Tx3tfgCQf3jq+aYsC1MOHtkYruUNHTqtyVo6iL5bc/LEgcauNOlzWnOgzaCVs10tdVMefcrLvXUeTVLR0H5lgqGZRPsZ94u7zJCyLzW0Oj44LUoHpf6q3hhWq8ccegsCyAKTUGA+6XKWCG9S31XeR4/MPxN/1rg==",
+    "created_at": "\uf0272025-11-22T04:39:32.158203+00:00",
+    "version_hash": "31EeydfaZb1Ac7lnrZiteh7kir/9Y5aAYaA9cSHF/jQ=",
+    "_dlt_load_id": "1763786365.368247"
+  }
+}

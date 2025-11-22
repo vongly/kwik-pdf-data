@@ -1,0 +1,135 @@
+{
+  "_state_version": 1,
+  "_state_engine_version": 4,
+  "_local": {
+    "first_run": false,
+    "initial_cwd": "/Users/vongly/dev/python/pdf-text/extract-load",
+    "last_run_context": {
+      "settings_dir": "/Users/vongly/dev/python/pdf-text/extract-load/.dlt",
+      "local_dir": "/Users/vongly/dev/python/pdf-text/extract-load",
+      "run_dir": "/Users/vongly/dev/python/pdf-text/extract-load",
+      "uri": "file:///Users/vongly/dev/python/pdf-text/extract-load"
+    },
+    "_last_extracted_at": "\uf0272025-11-22T04:39:32.190192+00:00",
+    "_last_extracted_hash": "31EeydfaZb1Ac7lnrZiteh7kir/9Y5aAYaA9cSHF/jQ="
+  },
+  "default_schema_name": "kwik_pdf_s3_to_postgres_dev",
+  "dataset_name": "kwik_data_raw",
+  "pipeline_name": "kwik_pdf_s3_to_postgres_dev",
+  "schema_names": [
+    "kwik_pdf_s3_to_postgres_dev"
+  ],
+  "destination_type": "dlt.destinations.postgres",
+  "destination_name": null,
+  "_version_hash": "31EeydfaZb1Ac7lnrZiteh7kir/9Y5aAYaA9cSHF/jQ=",
+  "sources": {
+    "kwik_pdf_s3_to_postgres_dev": {
+      "resources": {
+        "safe_drops": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "vglC4zHChJtgemcIqo7n",
+                "g/d+BuaGO/3nb8ZMO58S",
+                "IE8F/ycbshRGYZjh1e8x",
+                "ryU71rmFsf+OZ7G3fzbP",
+                "fPerubpJSMR8zyukwm/M",
+                "eI92JxE/pxy3bLJvLsux",
+                "vA08FhlW814s8j/FNtnu",
+                "sewLQplw7YhaaOCPSqPr",
+                "Csiftt1WEmI23tStOo1n",
+                "RUelCjY5P+6JSZ2eMX5k",
+                "0/Tuv9q/t2KJCdKMMFoe"
+              ]
+            }
+          }
+        },
+        "paid_in_out": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "V4WLaHb4XdV6X3Yi4mmY",
+                "q4JnqwPvkJlhGzSwecIe",
+                "eWoy8W6hU2F0huc9XRKI",
+                "IFp1C+M4l3hGoP/S4l2F",
+                "aFHYrEadxJSI1yMkQN8n",
+                "aCvJKo5g5y9RoAkQqEg3",
+                "Fo6Emv9pW4Wj6/2oKB8H",
+                "jT8WRKyjlnkE1gu6wUEU"
+              ]
+            }
+          }
+        },
+        "fuel_sales_by_grade": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "OGXhY/zTN5u7laZAGnnF",
+                "mT/SoiNNbwix3JRk3ZLQ",
+                "LFyNr3E/8zc0ykxXJUT7"
+              ]
+            }
+          }
+        },
+        "department_sales": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "LiYly+F9UArlebD58XGx",
+                "AkM9i+IfaZboI4x9I+hE",
+                "7OhSLPV4TmJUxeT1BjAa",
+                "O1j5nFOfwzecWoIe+bJX",
+                "BYoYrGcvqo6jsQ/xxXpT",
+                "/Q2DkDtwxFgaADxoRrcW",
+                "Wfkuf/68S1kNA95o7PC1",
+                "s8ebJDxuPd2oJtXTgoKU",
+                "toTNQkxo+1aQvmb+a+9X",
+                "HugFgJ/P3BmYfDSAK4N4",
+                "eReyj1hN1xO8jv9oKVU8",
+                "T59NfccUOZt5WZXhpEvX",
+                "A/RcDDN7yMuJ83Ubbtj9",
+                "CHCVwjkUopQz6l+5Xx6l",
+                "64lR3+50jh6sgQQVvX9K",
+                "b2hWF/q1Pry+caSJVhfB",
+                "TUKyFvUPPri+F+D/Hz0z"
+              ]
+            }
+          }
+        },
+        "daily_sales_summary": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "u8YyvWj6AXAQ7b7n3CzD",
+                "GIFyZH37b1oG5KHEN7Fw",
+                "iMxYWJ8FoEYzk5PFSmnz",
+                "t3wCidnmIqCeQWYaj51x"
+              ]
+            }
+          }
+        },
+        "daily_reports": {
+          "incremental": {
+            "processed_utc": {
+              "initial_value": null,
+              "last_value": "\uf0272025-11-21T20:36:08.695031-08:00",
+              "unique_hashes": [
+                "cTTae+FhtyN9pj5YcrqG"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
