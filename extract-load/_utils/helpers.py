@@ -8,7 +8,7 @@ import duckdb
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from env import (
-    PROJECT_DIRECTORY,
+    PROJECT_DIR,
     EXTRACT_DIR,
 )
 
@@ -39,7 +39,7 @@ def pretty_print_json_file(input_path, output_path):
     except Exception as e:
         pass
 
-def pretty_all_jsons(base_dir=PROJECT_DIRECTORY):
+def pretty_all_jsons(base_dir=PROJECT_DIR):
     for root, _, files in os.walk(base_dir):
         for file in files:
             if file.endswith('.json'):

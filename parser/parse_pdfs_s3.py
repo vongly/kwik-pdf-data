@@ -83,7 +83,7 @@ def parse_report(
         jobs=PARSE_FUNCTIONS,
         test=False,
     ):
-
+        
         processed_timestamp = datetime.now(timezone.utc)
 
         create_s3_folder(
@@ -181,7 +181,9 @@ def parse_report(
 if __name__ == '__main__':
     print('\n')
     files = get_all_pdf_files()
-
+    if not files:
+        print('NO FILES TO PROCESS')
+        exit()
     for file in files:
         print('PROCESSING PDF:', file['filepath'].split('/')[-1], '\n')
         parse_report(filepath=file['filepath'])

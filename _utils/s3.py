@@ -25,7 +25,7 @@ def get_files_s3_folder(client, prefix, bucket_name):
     if 'Contents' in objects:
         filepaths = [
             obj['Key'] for obj in objects['Contents']
-                if obj['Key'] != prefix and not obj['Key'].endswith('/processed/')
+                if obj['Key'] != prefix
         ]
     else:
         filepaths = []
