@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='paid_in_out_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -43,17 +33,17 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    transaction_type,
-    transaction_timestamp,
-    account_description,
-    amount,
-    tender_type,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    transaction_type::varchar as transaction_type,
+    transaction_timestamp::timestamp as transaction_timestamp,
+    account_description::varchar as account_description,
+    amount::int as amount,
+    tender_type::varchar as tender_type,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

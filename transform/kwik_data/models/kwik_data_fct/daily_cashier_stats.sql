@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='daily_cashier_stats_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -36,15 +26,15 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    description,
-    transaction_count,
-    transaction_amount,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    description::varchar as description,
+    transaction_count::int as transaction_count,
+    transaction_amount::numeric as transaction_amount,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

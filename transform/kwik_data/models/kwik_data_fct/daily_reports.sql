@@ -24,20 +24,20 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    original_filename,
-    report_name,
-    report_date,
-    operator_name,
-    operator_id,
-    software_version,
-    report_printed_at,
-    report_period_start,
-    report_period_end,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    original_filename::varchar as original_filename,
+    report_name::varchar as report_name,
+    report_date::date as report_date,
+    operator_name::varchar as operator_name,
+    operator_id::int as operator_id,
+    software_version::varchar as software_version,
+    report_printed_at::timestamp as report_printed_at,
+    report_period_start::timestamp as report_period_start,
+    report_period_end::timestamp as report_period_end,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

@@ -112,22 +112,33 @@ class ExtractReport:
         )
         return self.cleaned_text
 
-    def build_report_dictionary(self, word_list, columns, **kwargs):
+    def build_report_dictionary(self, word_list, columns, has_report=True, **kwargs):
         default_kwargs = {
             'report_id': self.report_id,
             'store_id': self.store_id,
             'report_name': self.table_name,
             'original_filename': self.filename,
             'processed_utc': self.processed_utc,
+            'has_report': has_report,
         }
 
         merged_kwargs = {**default_kwargs, **kwargs}
 
-        self.data = helpers.build_report_dictionary(
-            word_list,
-            columns,
-            **merged_kwargs,
-        )
+        if has_report:
+            # Builds report
+            self.data = helpers.build_report_dictionary(
+                word_list,
+                columns,
+                **merged_kwargs,
+            )
+
+        else:
+            #Builds empty report
+            columns_empty = {}
+            for col in columns:
+                columns_empty[col['name']] = None
+
+            self.data = [ {**merged_kwargs, **columns_empty} ]
 
         helpers.clean_field_values(
             dictionary_list=self.data,

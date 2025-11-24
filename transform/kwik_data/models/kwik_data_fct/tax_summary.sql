@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='tax_summary_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -39,18 +29,18 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    tax_type,
-    tax_collected,
-    sales_amount,
-    sales_forgiven_amount,
-    actual_sales,
-    exempt_amount,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    tax_type::varchar as tax_type,
+    tax_collected::numeric as tax_collected,
+    sales_amount::numeric as sales_amount,
+    sales_forgiven_amount::numeric as sales_forgiven_amount,
+    actual_sales::numeric as actual_sales,
+    exempt_amount::numeric as exempt_amount,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='safe_drop_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -49,19 +39,19 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    register_number,
-    cashier_name,
-    pouch_envelope_number,
-    drop_amount,
-    tender_type,
-    total_drop,
-    drop_time,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    register_number::int as register_number,
+    cashier_name::varchar as cashier_name,
+    pouch_envelope_number::int as pouch_envelope_number,
+    drop_amount::numeric as drop_amount,
+    tender_type::varchar as tender_type,
+    total_drop::numeric as total_drop,
+    drop_time::numeric as drop_time,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

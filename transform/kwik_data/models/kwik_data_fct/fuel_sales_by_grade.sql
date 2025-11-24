@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='fuel_sales_by_grade_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -38,17 +28,17 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    grade_number,
-    grade_name,
-    volume,
-    sales_amount,
-    percent_of_total,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    grade_number::int as grade_number,
+    grade_name::varchar as grade_name,
+    volume::numeric as volume,
+    sales_amount::numeric as sales_amount,
+    percent_of_total::numeric / 100 as percent_of_total,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

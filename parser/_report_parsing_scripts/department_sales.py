@@ -39,7 +39,14 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
     if not parse_object.check_for_report():
         output['has_report'] = False
         output['status'] = 'success'
-        output['data'] = 'No Report: Required phrases not in report'
+
+        data = parse_object.build_report_dictionary(
+            word_list=None,
+            columns=columns,
+            has_report=output['has_report'],
+        )
+
+        output['data'] = data
 
         return output
 

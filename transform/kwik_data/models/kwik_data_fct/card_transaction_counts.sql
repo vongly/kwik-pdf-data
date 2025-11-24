@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='card_transaction_counts_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -24,7 +14,7 @@ with stage as (
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
     from
-        {{ source('kwik_data_raw', 'card_transaction_counts_raw') }} a
+        {{ this_source }} a
 
     join
         {{ ref('daily_reports') }} b
@@ -35,14 +25,14 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    card_type,
-    count,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    card_type::varchar as card_type,
+    count::int as count,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where

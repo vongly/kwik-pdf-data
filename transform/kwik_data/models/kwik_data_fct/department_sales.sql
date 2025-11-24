@@ -1,13 +1,3 @@
-{% set relation = adapter.get_relation(
-    database=target.database,
-    schema='kwik_data_raw',
-    identifier='department_sales_raw',
-) %}
-
-{% if relation is none %}
-    {{ return(None) }}
-{% endif %}
-
 with stage as (
     select
         md5(
@@ -42,21 +32,21 @@ with stage as (
 )
 
 select
-    id,
-    report_id,
-    store_id,
-    report_name,
-    department_name,
-    gross_sales,
-    item_count,
-    refund_count,
-    net_count,
-    refund_amount,
-    discount_amount,
-    net_sales,
-    percent_sales,
-    processed_parsed_utc,
-    processed_load_utc
+    id::varchar as id,
+    report_id::varchar as report_id,
+    store_id::int as store_id,
+    report_name::varchar as report_name,
+    department_name::varchar as department_name,
+    gross_sales::numeric as gross_sales,
+    item_count::int as item_count,
+    refund_count::int as refund_count,
+    net_count::int as net_count,
+    refund_amount::numeric as refund_amount,
+    discount_amount::numeric as discount_amount,
+    net_sales::numeric as net_sales,
+    percent_sales::numeric / 100 as percent_sales,
+    processed_parsed_utc::timestamp as processed_parsed_utc,
+    processed_load_utc::timestamp as processed_load_utc
 from
     stage
 where
