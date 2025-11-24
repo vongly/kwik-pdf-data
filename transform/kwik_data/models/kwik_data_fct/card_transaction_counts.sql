@@ -1,3 +1,13 @@
+{% set relation = adapter.get_relation(
+    database=target.database,
+    schema=source('kwik_data_raw', 'card_transaction_counts_raw').schema,
+    identifier=source('kwik_data_raw', 'card_transaction_counts_raw').name
+) %}
+
+{% if relation is none %}
+    {{ return(None) }}
+{% endif %}
+
 with stage as (
     select
         md5(
