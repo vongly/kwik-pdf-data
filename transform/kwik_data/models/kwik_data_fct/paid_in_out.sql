@@ -1,7 +1,7 @@
 {% set relation = adapter.get_relation(
     database=target.database,
-    schema=source('kwik_data_raw', 'paid_in_out_raw').schema,
-    identifier=source('kwik_data_raw', 'paid_in_out_raw').name
+    schema='kwik_data_raw',
+    identifier='paid_in_out_raw',
 ) %}
 
 {% if relation is none %}
