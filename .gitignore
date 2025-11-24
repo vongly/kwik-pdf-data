@@ -5,8 +5,8 @@ project.yml
 *reports
 
 *.crt
-*.sql
+*tables.sql
 *__pycache__
-.dlt
+**/.dlt/
 
 docker-compose.yml
