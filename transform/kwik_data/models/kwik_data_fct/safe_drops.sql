@@ -8,14 +8,14 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        case
-            when a.register_number ~ '^[0-9]+$'
-            then a.register_number::int
-            when lower(a.register_number) = 'blank'
-            then 0
-            end as register_number,
         a.cashier_name,
-        a.pouch_envelope_number,
+        a.register_number,
+        case
+            when a.pouch_envelope_number ~ '^[0-9]+$'
+            then a.pouch_envelope_number::int
+            when lower(a.pouch_envelope_number) = 'blank'
+            then 0::int
+            end as pouch_envelope_number,
         a.drop_amount,
         a.tender_type,
         a.total_drop,
@@ -35,7 +35,7 @@ with stage as (
     
     where
         /* checks for  */
-        a.register_number ~ '^[0-9]+$' or lower(a.register_number) = 'blank'
+        a.pouch_envelope_number ~ '^[0-9]+$' or lower(a.pouch_envelope_number) = 'blank'
 )
 
 select
