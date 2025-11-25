@@ -129,7 +129,6 @@ def sub_parse_pdf(filename, filepath, processed_utc, paid_in_or_out, s3_client=N
         word_list=parsed_words,
         columns=columns,
         transaction_type=paid_in_or_out,
-
     )
     
     output['has_report'] = True
@@ -169,9 +168,9 @@ def parse_pdf(paid_in_or_out_values = ['paid_in', 'paid_out'], **kwargs):
         output['has_report'] = 1
 
     for output_stage in outputs_sub_report:
-        if output['data']:
-            output['data'].extend(output_stage['data'])
-        else:
+        if not output['data']:
             output['data'] = output_stage['data']
+        else:
+            output['data'].extend(output_stage['data'])
 
     return output

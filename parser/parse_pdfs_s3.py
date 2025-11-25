@@ -126,6 +126,10 @@ def parse_report(
             report_folder_path = f'{csv_base_folder}{report_name}/'
             processed_timestamp_string = processed_timestamp.strftime('%Y.%m.%d.%H.%M.%S')
 
+#            if report_name == 'paid_in_out':
+#                print(data)
+#                exit()
+
             for row in data:
                 row['has_report'] = has_report
 

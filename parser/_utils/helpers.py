@@ -2,6 +2,7 @@ from pypdf import PdfReader
 import csv
 from itertools import chain
 from dateutil import parser
+from datetime import datetime
 from io import BytesIO, StringIO
 
 import sys
@@ -314,9 +315,11 @@ def output_for_no_report(output, columns, **kwargs):
         if col['data_type'] in ['string']:
             report_columns[col['name']] = 'string'
         if col['data_type'] in ['float']:
-            report_columns[col['name']] = 1.0
+            report_columns[col['name']] = 1.50
         if col['data_type'] in ['int']:
             report_columns[col['name']] = 0
+        if col['data_type'] in ['timestamp']:
+            report_columns[col['name']] = datetime.now()
 
     data = build_report_dictionary(
         word_list=None,

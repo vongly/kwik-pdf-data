@@ -34,16 +34,14 @@ with stage as (
         and a.processed_utc = b.processed_parsed_utc
     
     where
-        /* checks for  */
-        a.pouch_envelope_number ~ '^[0-9]+$' or lower(a.pouch_envelope_number) = 'blank'
-
-    where
         /*
             If a PDF is missing a report, a dummy report is
             generated to not break the generated models
             -> if a report is missing, has_report = 0
         */
         a.has_report = 1
+        /* checks for integer or blank pouch_envelope_number */
+        and a.pouch_envelope_number ~ '^[0-9]+$' or lower(a.pouch_envelope_number) = 'blank'
 )
 
 select
