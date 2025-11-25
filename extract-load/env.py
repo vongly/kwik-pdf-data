@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
+import json
 
 env_path = Path(__file__).resolve().parent / '.env'
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 load_dotenv(dotenv_path=env_path)
 
 

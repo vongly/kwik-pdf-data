@@ -111,6 +111,7 @@ def clean_text(text, first_word_of_line_to_remove=[], skip_lead_rows=2, skip_tra
     parsed_text = text.split('\n') # splits by line break
 
     # auto removes lines that start with Page
+    first_word_of_line_to_remove = first_word_of_line_to_remove if isinstance(first_word_of_line_to_remove, list) else [first_word_of_line_to_remove]
     first_word_of_line_to_remove.append('Page')
 
     parsed_text = [ line for line in parsed_text if line.split(' ')[0] not in first_word_of_line_to_remove ]
@@ -167,9 +168,9 @@ def build_report_dictionary(word_list, columns=None, **kwargs):
     # Requires columns to be processed in sequential order
     data = []
 
-    if not columns:
+#    print(kwargs)
+    if columns is None:
         data = [kwargs]
-
         return data
 
     if not all('index' in c for c in columns):
@@ -213,7 +214,7 @@ def build_report_dictionary(word_list, columns=None, **kwargs):
             row[col['name']] = word
             j = j + 1
             continue
-            
+
     return data
 
 def clean_field_values(dictionary_list, columns):
@@ -223,13 +224,13 @@ def clean_field_values(dictionary_list, columns):
             if columns:
                 for col in columns:
                     name = col['name']
-                    dtype = col['dtype']
+                    data_type = col['data_type']
 
-                    if dtype in ['string']:
+                    if data_type in ['string']:
                         row[name] = row[name].replace('**',' ')
-                    if dtype in ['float']:
+                    if data_type in ['float']:
                         row[name] = float(row[name].replace('$','').replace('%','').replace(',',''))
-                    if dtype in ['int']:
+                    if data_type in ['int']:
                         row[name] = int(row[name].replace('$','').replace('%','').replace(',',''))
 
 
@@ -289,3 +290,40 @@ def format_phrase_as_one_word(text, phrase_list):
 
     return text
 
+def output_for_report(output, data):
+    '''
+        if a report exists -> has_report = 1
+    '''
+    output['has_report'] = 1
+    output['status'] = 'success'
+    output['data'] = data
+
+    return output
+
+def output_for_no_report(output, columns, **kwargs):
+    '''
+        if a report does not exist -> has_report = 0
+    '''
+    output['has_report'] = 0
+    output['status'] = 'success'
+
+    report_columns = kwargs if kwargs else {}
+    report_columns['row_index'] = 0
+    for col in columns:
+        # Dummy Values for columns
+        if col['data_type'] in ['string']:
+            report_columns[col['name']] = 'string'
+        if col['data_type'] in ['float']:
+            report_columns[col['name']] = 1.0
+        if col['data_type'] in ['int']:
+            report_columns[col['name']] = 0
+
+    data = build_report_dictionary(
+        word_list=None,
+        columns=None,
+        **report_columns,
+    )
+
+    output['data'] = data
+
+    return output

@@ -11,12 +11,12 @@ pdf_report_start_phrase = 'Tax Collection Summary Report'
 pdf_report_end_phrase = 'Car Wash Tax Report'
 
 columns = [
-    {'name': 'tax_type', 'dtype': 'string', 'index': 0},
-    {'name': 'tax_collected', 'dtype': 'float', 'index': 1},
-    {'name': 'sales_amount', 'dtype': 'float', 'index': 2},
-    {'name': 'sales_forgiven_amount', 'dtype': 'float', 'index': 3},
-    {'name': 'actual_sales', 'dtype': 'float', 'index': 4},
-    {'name': 'exempt_amount', 'dtype': 'float', 'index': 5},
+    {'name': 'tax_type', 'data_type': 'string', 'index': 0},
+    {'name': 'tax_collected', 'data_type': 'float', 'index': 1},
+    {'name': 'sales_amount', 'data_type': 'float', 'index': 2},
+    {'name': 'sales_forgiven_amount', 'data_type': 'float', 'index': 3},
+    {'name': 'actual_sales', 'data_type': 'float', 'index': 4},
+    {'name': 'exempt_amount', 'data_type': 'float', 'index': 5},
 ]
 
 def parse_pdf(filename, filepath, processed_utc, s3_client=None):
@@ -34,16 +34,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -74,8 +73,6 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         columns=columns,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

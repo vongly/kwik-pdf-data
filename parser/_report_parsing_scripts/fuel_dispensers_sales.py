@@ -12,18 +12,18 @@ pdf_report_start_phrase = 'Fuel Sales/Pump Totals Reconciliation Report'
 pdf_report_end_phrase = None
 
 columns = [
-    {'name': 'grade_name', 'dtype': 'string', 'index': 0},
-    {'name': 'grade_sales', 'dtype': 'float', 'index': 1},
-    {'name': 'sales_in_progress', 'dtype': 'float', 'index': 2},
-    {'name': 'ppu_discount', 'dtype': 'float', 'index': 3},
-    {'name': 'post_pay_discount', 'dtype': 'float', 'index': 4},
-    {'name': 'cash_credit_conversion', 'dtype': 'float', 'index': 5},
-    {'name': 'book_sales', 'dtype': 'float', 'index': 6},
-    {'name': 'metered_money', 'dtype': 'float', 'index': 7},
-    {'name': 'volume_sold', 'dtype': 'float', 'index': 8},
-    {'name': 'volume_in_progress', 'dtype': 'float', 'index': 9},
-    {'name': 'book_volume', 'dtype': 'float', 'index': 10},
-    {'name': 'metered_volume', 'dtype': 'float', 'index': 11},
+    {'name': 'grade_name', 'data_type': 'string', 'index': 0},
+    {'name': 'grade_sales', 'data_type': 'float', 'index': 1},
+    {'name': 'sales_in_progress', 'data_type': 'float', 'index': 2},
+    {'name': 'ppu_discount', 'data_type': 'float', 'index': 3},
+    {'name': 'post_pay_discount', 'data_type': 'float', 'index': 4},
+    {'name': 'cash_credit_conversion', 'data_type': 'float', 'index': 5},
+    {'name': 'book_sales', 'data_type': 'float', 'index': 6},
+    {'name': 'metered_money', 'data_type': 'float', 'index': 7},
+    {'name': 'volume_sold', 'data_type': 'float', 'index': 8},
+    {'name': 'volume_in_progress', 'data_type': 'float', 'index': 9},
+    {'name': 'book_volume', 'data_type': 'float', 'index': 10},
+    {'name': 'metered_volume', 'data_type': 'float', 'index': 11},
 ]
 
 '''
@@ -48,16 +48,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -241,8 +240,8 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         parse_words_iteration = parsed_words[start:end]
         
         data_iteration = helpers.build_report_dictionary(
-            word_list=parse_words_iteration,
             columns= columns,
+            word_list=parse_words_iteration,
             report_id=parse_object.report_id,
             store_id=parse_object.store_id,
             report_name=parse_object.table_name,
@@ -256,8 +255,6 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         columns=columns,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

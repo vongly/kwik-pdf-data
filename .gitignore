@@ -9,4 +9,6 @@ project.yml
 *__pycache__
 **/.dlt/
 
+.table_report_details
+
 docker-compose.yml

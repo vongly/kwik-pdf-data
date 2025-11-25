@@ -4,6 +4,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from _core.pdf_parser import ExtractReport
+from _utils import helpers
 
 '''
     daily_reports has a diffferent structure that all reports
@@ -29,8 +30,8 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
     output = parse_object.output.copy()
 
     data = parse_object.build_report_dictionary(
-        word_list=None,
         columns=None,
+        word_list=None,
         store_id=parse_object.store_id,
         report_date=parse_object.report_date,
         report_id=parse_object.report_id,
@@ -43,9 +44,7 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         processed_utc=parse_object.processed_utc,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output
 

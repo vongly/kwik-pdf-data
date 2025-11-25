@@ -8,8 +8,8 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        a.summary_description,
-        a.amount,
+        a.summary_description::varchar as summary_description,
+        a.amount::numeric as amount,
         a.processed_utc as processed_parsed_utc,
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
@@ -22,17 +22,25 @@ with stage as (
         a.report_id = b.report_id
         /* filters for matching parsed timestamp in daily_reports */
         and a.processed_utc = b.processed_parsed_utc
+
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    report_name::varchar as report_name,
-    summary_description::varchar as summary_description,
-    amount::numeric as amount,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    report_name,
+    summary_description,
+    amount,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where

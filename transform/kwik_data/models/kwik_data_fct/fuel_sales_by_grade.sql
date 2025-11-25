@@ -8,11 +8,11 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        a.grade_number,
-        a.grade_name,
-        a.volume,
-        a.sales_amount,
-        a.percent_of_total,
+        a.grade_number::int as grade_number,
+        a.grade_name::varchar as grade_name,
+        a.volume::numeric as volume,
+        a.sales_amount::numeric as sales_amount,
+        a.percent_of_total::numeric / 100 as percent_of_total,
         a.processed_utc as processed_parsed_utc,
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
@@ -25,20 +25,28 @@ with stage as (
         a.report_id = b.report_id
         /* filters for matching parsed timestamp in daily_reports */
         and a.processed_utc = b.processed_parsed_utc
+
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    report_name::varchar as report_name,
-    grade_number::int as grade_number,
-    grade_name::varchar as grade_name,
-    volume::numeric as volume,
-    sales_amount::numeric as sales_amount,
-    percent_of_total::numeric / 100 as percent_of_total,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    report_name,
+    grade_number,
+    grade_name,
+    volume,
+    sales_amount,
+    percent_of_total,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where

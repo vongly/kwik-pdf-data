@@ -21,23 +21,31 @@ with stage as (
         row_number() over(partition by a.report_id order by a._dlt_processed_utc desc) as load_order
     from
         {{ source('kwik_data_raw', 'daily_reports_raw') }} a
+
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    original_filename::varchar as original_filename,
-    report_name::varchar as report_name,
-    report_date::date as report_date,
-    operator_name::varchar as operator_name,
-    operator_id::int as operator_id,
-    software_version::varchar as software_version,
-    report_printed_at::timestamp as report_printed_at,
-    report_period_start::timestamp as report_period_start,
-    report_period_end::timestamp as report_period_end,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    original_filename,
+    report_name,
+    report_date,
+    operator_name,
+    operator_id,
+    software_version,
+    report_printed_at,
+    report_period_start,
+    report_period_end,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where

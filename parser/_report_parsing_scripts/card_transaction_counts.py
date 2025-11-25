@@ -11,8 +11,8 @@ pdf_report_start_phrase = 'Transaction Count by Card Type'
 pdf_report_end_phrase = 'METHOD OF PAYMENT TOTALS REPORT'
 
 columns = [
-    {'name': 'card_type', 'dtype': 'string', 'index': 0},
-    {'name': 'count', 'dtype': 'int', 'index': 1},
+    {'name': 'card_type', 'data_type': 'string', 'index': 0},
+    {'name': 'count', 'data_type': 'int', 'index': 1},
 ]
 
 def parse_pdf(filename, filepath, processed_utc, s3_client=None):
@@ -30,16 +30,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -61,14 +60,12 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Processing Data
     parsed_words = parsed_text.split(' ')
-
+    
     data = parse_object.build_report_dictionary(
-        word_list=parsed_words,
         columns=columns,
+        word_list=parsed_words,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

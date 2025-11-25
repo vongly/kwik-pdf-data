@@ -10,10 +10,10 @@ from _utils import helpers
 table_name = 'paid_in_out'
 
 columns = [
-    {'name': 'transaction_timestamp', 'dtype': 'timestamp', 'index': 0},
-    {'name': 'account_description', 'dtype': 'string', 'index': 1},
-    {'name': 'amount', 'dtype': 'float', 'index': 2},
-    {'name': 'tender_type', 'dtype': 'string', 'index': 3},
+    {'name': 'transaction_timestamp', 'data_type': 'timestamp', 'index': 0},
+    {'name': 'account_description', 'data_type': 'string', 'index': 1},
+    {'name': 'amount', 'data_type': 'float', 'index': 2},
+    {'name': 'tender_type', 'data_type': 'string', 'index': 3},
 ]
 
 
@@ -41,16 +41,16 @@ def sub_parse_pdf(filename, filepath, processed_utc, paid_in_or_out, s3_client=N
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
+            transaction_type=paid_in_or_out,
         )
-
-        output['data'] = data
 
         return output
 
@@ -150,7 +150,7 @@ def parse_pdf(paid_in_or_out_values = ['paid_in', 'paid_out'], **kwargs):
 
     # Reconstructs Output
     output = {
-        'has_report': False,
+        'has_report': 0,
         'status': None,
         'table_name': table_name,
         'report_id': outputs_sub_report[0]['report_id'],
@@ -160,20 +160,18 @@ def parse_pdf(paid_in_or_out_values = ['paid_in', 'paid_out'], **kwargs):
     if all(op.get('status') == 'success' for op in outputs_sub_report):
         output['status'] = 'success'
     else:
-        output['has_report'] = False
+        output['has_report'] = 0
         output['status'] = 'failed'
-        output['data'] = 'One or more jobs failed: ' + str(outputs_sub_report)
 
         return output
 
-    if any(op.get('has_report') == True for op in outputs_sub_report):
-        output['has_report'] = True
+    if any(op.get('has_report') == 1 for op in outputs_sub_report):
+        output['has_report'] = 1
 
-        for output_stage in outputs_sub_report:
-            if output_stage['has_report']:
-                if output['data']:
-                    output['data'].extend(output_stage['data'])
-                else:
-                    output['data'] = output_stage['data']
+    for output_stage in outputs_sub_report:
+        if output['data']:
+            output['data'].extend(output_stage['data'])
+        else:
+            output['data'] = output_stage['data']
 
     return output

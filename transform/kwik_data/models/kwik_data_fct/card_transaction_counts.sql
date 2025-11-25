@@ -8,13 +8,13 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        a.card_type,
-        a.count,
+        a.card_type::varchar as card_type,
+        a.count::int as count,
         a.processed_utc as processed_parsed_utc,
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
     from
-        {{ this_source }} a
+        {{ source('kwik_data_raw', 'card_transaction_counts_raw') }} a
 
     join
         {{ ref('daily_reports') }} b
@@ -22,17 +22,25 @@ with stage as (
         a.report_id = b.report_id
         /* filters for matching parsed timestamp in daily_reports */
         and a.processed_utc = b.processed_parsed_utc
+    
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    report_name::varchar as report_name,
-    card_type::varchar as card_type,
-    count::int as count,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    report_name,
+    card_type,
+    count,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where

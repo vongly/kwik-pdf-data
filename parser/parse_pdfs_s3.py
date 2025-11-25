@@ -29,6 +29,7 @@ from env import (
     
 import sys
 from pathlib import Path
+import traceback
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
@@ -108,73 +109,69 @@ def parse_report(
                 processed_utc=processed_timestamp,
                 s3_client=s3_client,
             )
+            my_result = result.copy()
 
-            result['original_filepath'] = filepath
-            results.append(result)
-            
-            my_response = result.copy()
-            if isinstance(my_response['data'], list):
-                my_response['records_processed'] = len(my_response['data'])
+            my_result['original_filepath'] = filepath
+
+            if isinstance(my_result['data'], list):
+                my_result['records_processed'] = len(my_result['data'])
+
+            results.append(my_result)
 
         for r in results:
             report_id = r['report_id']
             report_name = r['table_name']
+            has_report = r['has_report']
+            data = r['data']
+            report_folder_path = f'{csv_base_folder}{report_name}/'
+            processed_timestamp_string = processed_timestamp.strftime('%Y.%m.%d.%H.%M.%S')
 
-            if r['has_report']:
-                processed_timestamp_string = processed_timestamp.strftime('%Y.%m.%d.%H.%M.%S')
-                try:
-                    # Report Written
-                    report_folder_path = f'{csv_base_folder}{report_name}/'
+            for row in data:
+                row['has_report'] = has_report
 
-                    if test is False:
-                        create_s3_folder(
-                            client=s3_client,
-                            folder_path=report_folder_path,
-                            bucket_name=S3_BUCKET,
-                        )
-                        write_csv_s3(
-                            client=s3_client,
-                            dictionary=r['data'],
-                            filename=f'{report_id}-{report_name}-{processed_timestamp_string}.csv',
-                            destination=report_folder_path,
-                        )
+            try:
+                if test is False:
+                    create_s3_folder(
+                        client=s3_client,
+                        folder_path=report_folder_path,
+                        bucket_name=S3_BUCKET,
+                    )
+                    write_csv_s3(
+                        client=s3_client,
+                        dictionary=data,
+                        filename=f'{report_id}-{report_name}-{processed_timestamp_string}.csv',
+                        destination=report_folder_path,
+                    )
+                if has_report:
+                    if not test:
                         print(f'CSV WRITTEN - {report_name}')
-                    elif test is True:
+                    else:
                         print(f'REPORT FOUND - {report_name}')
 
-                except Exception as e:
-                    # Error
-                    print(f'ERROR - CSV NOT WRITTIEN - {report_name}: {e}')
-                    exit()
-            else:
-                # No Report
-                print(f'NO REPORT - CSV NOT WRITTIEN - {report_name}')
+                elif not r['has_report']:
+                    if not test:
+                        print(f'REPORT NOT FOUND - EMPTY CSV WRITTEN - {report_name}')
+                    else:
+                        print(f'REPORT NOT FOUND - {report_name}')
+
+            except Exception as e:
+                print(f'ERROR - CSV NOT WRITTEN - {report_name}: {e}')
+                traceback.print_exc()
+                exit()
 
         source = filepath
-        destination = f'{pdf_processed_folder}{report_id}-{processed_timestamp_string}.pdf'
+        destination = f'{pdf_processed_folder}{report_id}-{processed_timestamp_string}.pdf' if test is False else pdf_processed_folder
 
-
-        if test is False:
-            move_details = move_s3_file(
-                client=s3_client,
-                source=source,
-                destination=destination,
-                bucket_name=bucket_name,
-                test=test,
-            )
-        elif test is True:
-            move_details = move_s3_file(
-                client=s3_client,
-                source=source,
-                destination=pdf_processed_folder,
-                bucket_name=bucket_name,
-                test=test,
-            )
-
+        move_details = move_s3_file(
+            client=s3_client,
+            source=source,
+            destination=destination,
+            bucket_name=bucket_name,
+            test=test,
+        )
 
         for r in results:
             r['move_details'] = move_details
-
 
         return results
 

@@ -12,15 +12,15 @@ pdf_report_end_phrase = 'Total PLU'
 
 # Columns are out of order due to processing logic
 columns = [
-    {'name': 'plu_no', 'dtype': 'string', 'index': 0},
-    {'name': 'pkg_qty', 'dtype': 'int', 'index': 1},
-    {'name': 'tender_type', 'dtype': 'string', 'index': 8},
-    {'name': 'department_name', 'dtype': 'string', 'index': 7},
-    {'name': 'count', 'dtype': 'int', 'index': 6},
-    {'name': 'price', 'dtype': 'float', 'index': 5},
-    {'name': 'sales', 'dtype': 'float', 'index': 4},
-    {'name': 'percent_dept', 'dtype': 'float', 'index': 3},
-    {'name': 'percent_total', 'dtype': 'float', 'index': 2},
+    {'name': 'plu_no', 'data_type': 'string', 'index': 0},
+    {'name': 'pkg_qty', 'data_type': 'int', 'index': 1},
+    {'name': 'tender_type', 'data_type': 'string', 'index': 8},
+    {'name': 'department_name', 'data_type': 'string', 'index': 7},
+    {'name': 'count', 'data_type': 'int', 'index': 6},
+    {'name': 'price', 'data_type': 'float', 'index': 5},
+    {'name': 'sales', 'data_type': 'float', 'index': 4},
+    {'name': 'percent_dept', 'data_type': 'float', 'index': 3},
+    {'name': 'percent_total', 'data_type': 'float', 'index': 2},
 ]
 
 def parse_pdf(filename, filepath, processed_utc, s3_client=None):
@@ -38,16 +38,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -100,9 +99,7 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         columns=columns,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output
 

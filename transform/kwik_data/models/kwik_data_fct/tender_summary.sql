@@ -8,15 +8,15 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        a.plu_no,
-        a.pkg_qty,
-        a.percent_total,
-        a.percent_dept,
-        a.sales,
-        a.price,
-        a.count,
-        a.department_name,
-        a.tender_type,
+        a.plu_no::varchar as plu_no,
+        a.pkg_qty::int as pkg_qty,
+        a.percent_total::numeric / 100 as percent_total,
+        a.percent_dept::varchar as percent_dept,
+        a.sales::numeric as sales,
+        a.price::numeric as price,
+        a.count::int as count,
+        a.department_name::varchar as department_name,
+        a.tender_type::varchar as tender_type,
         a.processed_utc as processed_parsed_utc,
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
@@ -29,24 +29,32 @@ with stage as (
         a.report_id = b.report_id
         /* filters for matching parsed timestamp in daily_reports */
         and a.processed_utc = b.processed_parsed_utc
+
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    report_name::varchar as report_name,
-    plu_no::varchar as plu_no,
-    pkg_qty::intvarchar as pkg_qty,
-    percent_total::numeric / 100 as percent_total,
-    percent_dept::numeric / 100 as percent_dept,
-    sales::numeric as sales,
-    price::numeric as price,
-    count::int as count,
-    department_name::varchar as department_name,
-    tender_type::varchar as tender_type,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    report_name,
+    plu_no,
+    pkg_qty,
+    percent_total,
+    percent_dept,
+    sales,
+    price,
+    count,
+    department_name,
+    tender_type,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where

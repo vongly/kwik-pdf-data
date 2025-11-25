@@ -12,11 +12,11 @@ pdf_report_start_phrase = 'Safe Drop Report\nRegister'
 pdf_report_end_phrase = None
 
 columns = [
-    {'name': 'pouch_envelope_number', 'dtype': 'string', 'index': 0},
-    {'name': 'drop_amount', 'dtype': 'float', 'index': 1},
-    {'name': 'tender_type', 'dtype': 'string', 'index': 2},
-    {'name': 'total_drop', 'dtype': 'float', 'index': 3},
-    {'name': 'drop_time', 'dtype': 'datetime', 'index': 4},
+    {'name': 'pouch_envelope_number', 'data_type': 'string', 'index': 0},
+    {'name': 'drop_amount', 'data_type': 'float', 'index': 1},
+    {'name': 'tender_type', 'data_type': 'string', 'index': 2},
+    {'name': 'total_drop', 'data_type': 'float', 'index': 3},
+    {'name': 'drop_time', 'data_type': 'datetime', 'index': 4},
 ]
 
 '''
@@ -42,16 +42,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -201,8 +200,6 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
         columns=columns
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

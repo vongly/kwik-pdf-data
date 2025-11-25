@@ -42,10 +42,17 @@ class S3Call():
 
         limit_clause = f' LIMIT {self.test_limit}' if self.test else ''
 
+        duck_db_function = f'read_{filetype}'
         if filetype == 'csv':
-            duck_db_function = 'read_csv_auto'
+            query_suffix = '''
+                    ,
+                    header=true,
+                    sample_size=1,
+                    auto_detect=false
+        '''
         else:
-            duck_db_function = f'read_{filetype}'
+            query_suffix = ''
+
 
         '''
         must align with: extract-load/utils/resources/file.py
@@ -87,7 +94,9 @@ class S3Call():
                 *,
                 cast('{processed_timestamp}' as timestamp) as _dlt_processed_utc
             from
-                {duck_db_function}('{target_folder}*.csv')
+                {duck_db_function}(
+                    '{target_folder}*.csv'
+                )
         ''' + where_clause + limit_clause + ';'
 
         con.execute(query)

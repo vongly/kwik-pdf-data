@@ -11,15 +11,15 @@ pdf_report_start_phrase = 'Department Sales Report'
 pdf_report_end_phrase = '100%'
 
 columns = [
-    {'name': 'department_name', 'dtype': 'string', 'index': 0},
-    {'name': 'gross_sales', 'dtype': 'float', 'index': 1},
-    {'name': 'item_count', 'dtype': 'int', 'index': 2},
-    {'name': 'refund_count', 'dtype': 'int', 'index': 3},
-    {'name': 'net_count', 'dtype': 'int', 'index': 4},
-    {'name': 'refund_amount', 'dtype': 'float', 'index': 5},
-    {'name': 'discount_amount', 'dtype': 'float', 'index': 6},
-    {'name': 'net_sales', 'dtype': 'float', 'index': 7},
-    {'name': 'percent_sales', 'dtype': 'float', 'index': 8},
+    {'name': 'department_name', 'data_type': 'string', 'index': 0},
+    {'name': 'gross_sales', 'data_type': 'float', 'index': 1},
+    {'name': 'item_count', 'data_type': 'int', 'index': 2},
+    {'name': 'refund_count', 'data_type': 'int', 'index': 3},
+    {'name': 'net_count', 'data_type': 'int', 'index': 4},
+    {'name': 'refund_amount', 'data_type': 'float', 'index': 5},
+    {'name': 'discount_amount', 'data_type': 'float', 'index': 6},
+    {'name': 'net_sales', 'data_type': 'float', 'index': 7},
+    {'name': 'percent_sales', 'data_type': 'float', 'index': 8},
 ]
 
 def parse_pdf(filename, filepath, processed_utc, s3_client=None):
@@ -37,16 +37,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -73,12 +72,10 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
     parsed_words = parsed_text.split(' ')
 
     data = parse_object.build_report_dictionary(
-        word_list=parsed_words,
         columns=columns,
+        word_list=parsed_words,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

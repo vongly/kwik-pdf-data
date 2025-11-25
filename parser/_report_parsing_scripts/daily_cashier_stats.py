@@ -11,9 +11,9 @@ pdf_report_start_phrase = 'Store Till Summary Cashier Statistics'
 pdf_report_end_phrase = 'Test Fuel'
 
 columns = [
-    {'name': 'description', 'dtype' : 'string', 'index': 0},
-    {'name': 'transaction_count', 'dtype' : 'int', 'index': 1},
-    {'name': 'transaction_amount', 'dtype' : 'float', 'index': 2},
+    {'name': 'description', 'data_type' : 'string', 'index': 0},
+    {'name': 'transaction_count', 'data_type' : 'int', 'index': 1},
+    {'name': 'transaction_amount', 'data_type' : 'float', 'index': 2},
 ]
 
 def parse_pdf(filename, filepath, processed_utc, s3_client=None):
@@ -31,16 +31,15 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Checks if Report is in PDF
     if not parse_object.check_for_report():
-        output['has_report'] = False
-        output['status'] = 'success'
-
-        data = parse_object.build_report_dictionary(
-            word_list=None,
+        output = helpers.output_for_no_report(
+            output=output,
             columns=columns,
-            has_report=output['has_report'],
+            report_id=parse_object.report_id,
+            store_id=parse_object.store_id,
+            report_name=parse_object.table_name,
+            original_filename=parse_object.filename,
+            processed_utc=parse_object.processed_utc,
         )
-
-        output['data'] = data
 
         return output
 
@@ -68,12 +67,10 @@ def parse_pdf(filename, filepath, processed_utc, s3_client=None):
 
     # Processing Data
     data = parse_object.build_report_dictionary(
-        word_list=parsed_words,
         columns=columns,
+        word_list=parsed_words,
     )
 
-    output['has_report'] = True
-    output['status'] = 'success'
-    output['data'] = data
+    output = helpers.output_for_report(output, data)
 
     return output

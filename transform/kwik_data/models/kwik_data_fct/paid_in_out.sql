@@ -13,11 +13,11 @@ with stage as (
         a.report_id,
         a.store_id,
         a.report_name,
-        a.transaction_type,
-        a.transaction_timestamp,
-        a.account_description,
-        a.amount,
-        a.tender_type,
+        a.transaction_type::varchar as transaction_type,
+        a.transaction_timestamp::timestamp as transaction_timestamp,
+        a.account_description::varchar as account_description,
+        a.amount::numeric as amount,
+        a.tender_type::varchar as tender_type,
         a.processed_utc as processed_parsed_utc,
         a._dlt_processed_utc as processed_load_utc,
         dense_rank() over(order by a._dlt_processed_utc desc) as load_order
@@ -30,20 +30,28 @@ with stage as (
         a.report_id = b.report_id
         /* filters for matching parsed timestamp in daily_reports */
         and a.processed_utc = b.processed_parsed_utc
+
+    where
+        /*
+            If a PDF is missing a report, a dummy report is
+            generated to not break the generated models
+            -> if a report is missing, has_report = 0
+        */
+        a.has_report = 1
 )
 
 select
-    id::varchar as id,
-    report_id::varchar as report_id,
-    store_id::int as store_id,
-    report_name::varchar as report_name,
-    transaction_type::varchar as transaction_type,
-    transaction_timestamp::timestamp as transaction_timestamp,
-    account_description::varchar as account_description,
-    amount::int as amount,
-    tender_type::varchar as tender_type,
-    processed_parsed_utc::timestamp as processed_parsed_utc,
-    processed_load_utc::timestamp as processed_load_utc
+    id,
+    report_id,
+    store_id,
+    report_name,
+    transaction_type,
+    transaction_timestamp,
+    account_description,
+    amount,
+    tender_type,
+    processed_parsed_utc,
+    processed_load_utc
 from
     stage
 where
